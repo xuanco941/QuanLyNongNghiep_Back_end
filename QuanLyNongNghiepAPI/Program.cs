@@ -1,6 +1,6 @@
 using QuanLyNongNghiepAPI.Models;
 using Microsoft.EntityFrameworkCore;
-using QuanLyNongNghiepAPI.Repository.User;
+using QuanLyNongNghiepAPI.Services.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,11 +14,8 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlServer(connectionString));
 
 
-
-//services Repository
-builder.Services.AddTransient<IUserRepository, UserRepository>();
-
 //services
+builder.Services.AddScoped<IUserService, UserService>();
 
 
 
