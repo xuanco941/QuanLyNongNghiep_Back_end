@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using QuanLyNongNghiepAPI.DataTransferObject;
 using QuanLyNongNghiepAPI.Models;
 using QuanLyNongNghiepAPI.Services;
+using QuanLyNongNghiepAPI.Services.Authentication;
 using QuanLyNongNghiepAPI.Services.User;
+using System.Collections.Generic;
 
 namespace QuanLyNongNghiepAPI.Controllers
 {
@@ -12,28 +15,52 @@ namespace QuanLyNongNghiepAPI.Controllers
     {
 
         private readonly ILogger<AuthController> _logger;
-        private readonly IUserService _userService;
+        private readonly IAuthenticationService _authenticationService;
 
-        public AuthController(ILogger<AuthController> logger, IUserService userService)
+
+        public AuthController(ILogger<AuthController> logger, IAuthenticationService authenticationService, IConfiguration config)
         {
             _logger = logger;
-            _userService = userService;
+            _authenticationService = authenticationService;
         }
 
-
-
-        //[HttpGet("GetABC")]
-        //public IActionResult GetABC()
-        //{
-        //    return new JsonResult(new string[] { "abc", "bcf", "123" });
-        //}
-
-        [HttpGet]
-        public async Task<ActionResult<List<Models.User>?>> GetAllUser()
+        [AllowAnonymous]
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginModel login)
         {
-            return await _userService.GetAllUserAsync();
+            try
+            {
+                User? user = await _authenticationService.AuthenticateUserAsync(login);
+                if (user != null)
+                {
+                    var tokenString = _authenticationService.GenerateTokenForUser(user);
+
+                    return new OkObjectResult(new APIResponse<string>(tokenString, "Đăng nhập thành công", true));
+                }
+                else
+                {
+                    return new OkObjectResult(new APIResponse<string>(null, "Đăng nhập thất bại.", true));
+                }
+            }
+            catch
+            {
+                return new OkObjectResult(new APIResponse<string>(null, "Lỗi, truy vấn thất bại.", false));
+            }
         }
 
 
+        //[HttpGet("GetAllUser")]
+        //public async Task<ActionResult<APIResponse<List<Models.User>>>> GetAllUser()
+        //{
+        //    try
+        //    {
+        //        List<Models.User> list = await _userService.GetAllUserAsync();
+        //        return new APIResponse<List<User>>(list, "OK", true);
+        //    }
+        //    catch
+        //    {
+        //        return new APIResponse<List<User>>(null, "lỗi", true);
+        //    }
+        //}
     }
 }

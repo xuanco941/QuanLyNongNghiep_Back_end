@@ -1,7 +1,9 @@
-﻿namespace QuanLyNongNghiepAPI.Services.User
+﻿using QuanLyNongNghiepAPI.DataTransferObject;
+
+namespace QuanLyNongNghiepAPI.Services.User
 {
     public interface IUserService
     {
-        public Task<List<Models.User>>? GetAllUserAsync();
+        public Task<List<Models.User>> GetAllUserAsync();
     }
 }

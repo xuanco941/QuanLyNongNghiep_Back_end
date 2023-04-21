@@ -4,12 +4,15 @@ namespace QuanLyNongNghiepAPI.Models
 {
     public class DatabaseContext : DbContext
     {
+        private readonly IConfiguration _configuration;
+
 
         public DbSet<User> Users { get; set; }
 
-        public DatabaseContext(DbContextOptions<DatabaseContext> options)
+        public DatabaseContext(DbContextOptions<DatabaseContext> options, IConfiguration configuration)
     : base(options)
         {
+            _configuration = configuration;
         }
 
 
@@ -24,8 +27,10 @@ namespace QuanLyNongNghiepAPI.Models
             //user
             modelBuilder.Entity<User>(entity =>
             {
-                entity.Property(e => e.Password).HasDefaultValueSql("('leanway')");
+                entity.Property(e => e.Role).HasDefaultValue(_configuration.GetValue<string>("Role:User"));
+                entity.Property(e => e.Password).HasDefaultValue("leanway");
                 entity.HasIndex(e => e.Username).IsUnique();
+
             });
 
             ////GroupID có thể null

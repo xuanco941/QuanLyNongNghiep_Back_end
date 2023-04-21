@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using QuanLyNongNghiepAPI.Controllers;
+using QuanLyNongNghiepAPI.DataTransferObject;
 using QuanLyNongNghiepAPI.Models;
 
 namespace QuanLyNongNghiepAPI.Services.User
@@ -7,21 +9,24 @@ namespace QuanLyNongNghiepAPI.Services.User
     {
         private readonly DatabaseContext _dbContext;
 
-        public UserService(DatabaseContext dbContext)
+        public UserService( DatabaseContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public Task<List<Models.User>>? GetAllUserAsync()
+        //get all user
+        public async Task<List<Models.User>> GetAllUserAsync()
         {
             try
             {
-                return _dbContext.Users.ToListAsync();
+                return await _dbContext.Users.ToListAsync();
             }
             catch
             {
-                return null;
+                throw;
             }
         }
+
     }
+
 }

@@ -3,7 +3,7 @@ using System.Text;
 
 namespace QuanLyNongNghiepAPI.Utils
 {
-    public class ConvertString
+    public class ConvertStringUtils
     {
         public static string RemoveAccents(string input)
         {

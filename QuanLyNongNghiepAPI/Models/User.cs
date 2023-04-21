@@ -9,16 +9,20 @@ namespace QuanLyNongNghiepAPI.Models
     {
         [Key]
         public int UserID { get; set; }
-        [StringLength(100)]
-        public string FullName { get; set; } = "";
+        [StringLength(50)]
+        public string FullName { get; set; } = string.Empty;
+        [Required]
+        [StringLength(50)]
+        public string Username { get; set; } = string.Empty;
         [Required]
         [StringLength(100)]
-        public string Username { get; set; }
-        [StringLength(100)]
+        public string Password { get; set; } = string.Empty;
         [Required]
-        public string Password { get; set; }
-        public string? Email { get; set; } = "abc@gmail.com";
-        public string? PhoneNumber { get; set; } = "0123456789";
+        public string Email { get; set; } = string.Empty;
+        [Required]
+        public string PhoneNumber { get; set; } = string.Empty;
+        [Required]
+        public string Role { get; set; } = string.Empty;
 
     }
 }

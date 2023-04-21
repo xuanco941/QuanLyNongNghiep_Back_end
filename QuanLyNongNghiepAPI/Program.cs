@@ -1,6 +1,10 @@
 using QuanLyNongNghiepAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using QuanLyNongNghiepAPI.Services.User;
+using QuanLyNongNghiepAPI.Services.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,14 +12,43 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-//db
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection"); // shorthand getSection("ConnectionStrings")["DefaultConnection"]
-builder.Services.AddDbContext<DatabaseContext>(options =>
-    options.UseSqlServer(connectionString));
 
+//service auth
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]))
+        };
+    });
+
+
+//service db 
+builder.Services.AddDbContext<DatabaseContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));// shorthand getSection("ConnectionStrings")["DefaultConnection"]
+
+
+
+//service config
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
 //services
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+
+
+
+
+
+
 
 
 
