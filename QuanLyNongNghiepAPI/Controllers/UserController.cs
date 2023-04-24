@@ -35,17 +35,17 @@ namespace QuanLyNongNghiepAPI.Controllers
 
                     if (userId != null)
                     {
-                        Models.User? user = _userService.GetAUser(int.Parse(userId));
+                        Models.User? user = await _userService.GetAUser(int.Parse(userId));
                         return new OkObjectResult(new APIResponse<Models.User>(user, "success", true));
                     }
                     else
                     {
-                        return new OkObjectResult(new APIResponse<Models.User>(null, "Không tồn tại", true));
+                        return new OkObjectResult(new APIResponse<Models.User>(null, "Không tồn tại", false));
                     }
                 }
                 else
                 {
-                    return new OkObjectResult(new APIResponse<Models.User>(null, "Không tồn tại", true));
+                    return new OkObjectResult(new APIResponse<Models.User>(null, "Không tồn tại", false));
                 }
             }
             catch

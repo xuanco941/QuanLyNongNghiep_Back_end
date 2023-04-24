@@ -5,6 +5,6 @@ namespace QuanLyNongNghiepAPI.Services.User
     public interface IUserService
     {
         public Task<List<Models.User>> GetAllUserAsync();
-        public Models.User? GetAUser(int uid);
+        public Task<Models.User?> GetAUser(int uid);
     }
 }

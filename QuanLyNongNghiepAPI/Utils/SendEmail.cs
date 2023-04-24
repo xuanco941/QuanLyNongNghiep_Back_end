@@ -1,10 +1,9 @@
-﻿using QuanLyNongNghiepAPI.Models;
-using System.Net;
+﻿using System.Net;
 using System.Net.Mail;
 
 namespace QuanLyNongNghiepAPI.Utils
 {
-    public class SendEmail
+    public class SendEmail : ISendEmail
     {
         private readonly IConfiguration _config;
 
@@ -13,23 +12,21 @@ namespace QuanLyNongNghiepAPI.Utils
             _config = config;
         }
 
-        public bool SendEmailFromGmail(string toEmail)
+        public async Task <bool> SendEmailFromGmail(string toEmail, string subject, string body)
         {
             string fromEmail = _config["Email:Address"];
             string password = _config["Email:Password"]; ; //app password , 2auth
-
-
-            MailMessage message = new MailMessage(_config["Email:Address"], toEmail);
-            message.Subject = "Test Email";
-            message.Body = "This is a test email sent from C#.";
-
-
-            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
-            smtpClient.Credentials = new NetworkCredential(fromEmail, password);
-            smtpClient.EnableSsl = true;
-            smtpClient.UseDefaultCredentials = false;
             try
             {
+                MailMessage message = new MailMessage(fromEmail, toEmail);
+                message.Subject = subject;
+                message.Body = body;
+
+
+                SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
+                smtpClient.Credentials = new NetworkCredential(fromEmail, password);
+                smtpClient.EnableSsl = true;
+                smtpClient.UseDefaultCredentials = false;
                 smtpClient.Send(message);
                 return true;
             }

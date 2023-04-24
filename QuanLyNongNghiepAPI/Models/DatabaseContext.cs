@@ -27,8 +27,8 @@ namespace QuanLyNongNghiepAPI.Models
             //user
             modelBuilder.Entity<User>(entity =>
             {
-                entity.Property(e => e.Role).HasDefaultValue(_configuration.GetValue<string>("Role:User"));
-                entity.Property(e => e.Password).HasDefaultValue("leanway");
+                //entity.Property(e => e.Role).HasDefaultValueSql(_configuration.GetValue<string>("Role:User"));
+                //entity.Property(e => e.Password).HasDefaultValue("leanway");
                 entity.HasIndex(e => e.Username).IsUnique();
 
             });

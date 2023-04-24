@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using QuanLyNongNghiepAPI.Services.User;
 using QuanLyNongNghiepAPI.Services.Authentication;
+using QuanLyNongNghiepAPI.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,6 +54,14 @@ builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
 
 //service config
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+
+
+
+
+
+builder.Services.AddSingleton<ISendEmail,SendEmail>();
+
+
 
 //services
 builder.Services.AddScoped<IUserService, UserService>();

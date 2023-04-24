@@ -6,9 +6,9 @@
         public string Message { get; set; } = string.Empty;
         public T? Data { get; set; }
 
-        public APIResponse(T? data, string message, bool isOk)
+        public APIResponse(T? data, string message, bool isSuccess)
         {
-            if(isOk == true)
+            if(isSuccess == true)
             {
                 Status = "success";
             }
