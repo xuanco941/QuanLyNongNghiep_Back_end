@@ -31,6 +31,7 @@ builder.Services.AddAuthentication(opt => {
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]))
         };
+        //options.SaveToken = true;
     });
 
 
@@ -60,7 +61,8 @@ builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 
 
-
+//http context
+builder.Services.AddHttpContextAccessor();
 
 
 

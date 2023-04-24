@@ -52,7 +52,7 @@ namespace QuanLyNongNghiepAPI.Controllers
 
         [AllowAnonymous]
         [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromBody] LoginDTO login)
+        public async Task<IActionResult> Register([FromBody] RegisterDTO register)
         {
             return new OkResult();
         }

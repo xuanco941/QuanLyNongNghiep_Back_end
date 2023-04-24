@@ -42,8 +42,6 @@ namespace QuanLyNongNghiepAPI.Services.Authentication
                 new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()), //Id của user
                 new Claim(ClaimTypes.Email, user.Email), // thêm claim email
                 new Claim(ClaimTypes.Role, user.Role), // thêm claim role
-                new Claim(ClaimTypes.Name, user.Username) // thêm claim role
-
                  }),
                 Expires = DateTime.Now.AddDays(double.Parse(_config["Jwt:ExpireDays"])),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

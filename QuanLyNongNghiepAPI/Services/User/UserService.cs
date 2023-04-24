@@ -24,6 +24,18 @@ namespace QuanLyNongNghiepAPI.Services.User
                 throw;
             }
         }
+        public Models.User? GetAUser(int uid)
+        {
+            try
+            {
+                Models.User? u = _dbContext.Users.FirstOrDefault(u => u.UserID == uid);
+                return u;
+            }
+            catch
+            {
+                throw;
+            }
+        }
 
     }
 
