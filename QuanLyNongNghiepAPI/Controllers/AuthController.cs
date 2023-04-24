@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuanLyNongNghiepAPI.DataTransferObject;
+using QuanLyNongNghiepAPI.DataTransferObject.UserDTOs;
 using QuanLyNongNghiepAPI.Models;
-using QuanLyNongNghiepAPI.Services;
 using QuanLyNongNghiepAPI.Services.Authentication;
-using QuanLyNongNghiepAPI.Services.User;
-using System.Collections.Generic;
+
 
 namespace QuanLyNongNghiepAPI.Controllers
 {
@@ -16,17 +15,19 @@ namespace QuanLyNongNghiepAPI.Controllers
 
         private readonly ILogger<AuthController> _logger;
         private readonly IAuthenticationService _authenticationService;
+        private readonly IConfiguration _config;
 
 
         public AuthController(ILogger<AuthController> logger, IAuthenticationService authenticationService, IConfiguration config)
         {
             _logger = logger;
             _authenticationService = authenticationService;
+            _config = config;
         }
 
         [AllowAnonymous]
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel login)
+        public async Task<IActionResult> Login([FromBody] LoginDTO login)
         {
             try
             {
@@ -39,28 +40,22 @@ namespace QuanLyNongNghiepAPI.Controllers
                 }
                 else
                 {
-                    return new OkObjectResult(new APIResponse<string>(null, "Đăng nhập thất bại.", true));
+                    return new OkObjectResult(new APIResponse<string>(null, "Tài khoản hoặc mật khẩu không chính xác.", true));
                 }
             }
             catch
             {
-                return new OkObjectResult(new APIResponse<string>(null, "Lỗi, truy vấn thất bại.", false));
+                return new BadRequestObjectResult(new APIResponse<string>(null, "Lỗi, truy vấn thất bại.", false));
             }
         }
 
 
-        //[HttpGet("GetAllUser")]
-        //public async Task<ActionResult<APIResponse<List<Models.User>>>> GetAllUser()
-        //{
-        //    try
-        //    {
-        //        List<Models.User> list = await _userService.GetAllUserAsync();
-        //        return new APIResponse<List<User>>(list, "OK", true);
-        //    }
-        //    catch
-        //    {
-        //        return new APIResponse<List<User>>(null, "lỗi", true);
-        //    }
-        //}
+        [AllowAnonymous]
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromBody] LoginDTO login)
+        {
+            return new OkResult();
+        }
+
     }
 }

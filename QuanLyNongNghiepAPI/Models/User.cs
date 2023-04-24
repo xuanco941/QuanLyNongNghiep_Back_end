@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
 
 namespace QuanLyNongNghiepAPI.Models
 {
@@ -21,6 +20,8 @@ namespace QuanLyNongNghiepAPI.Models
         public string Email { get; set; } = string.Empty;
         [Required]
         public string PhoneNumber { get; set; } = string.Empty;
+        [Required]
+        public string Address { get; set; } = string.Empty;
         [Required]
         public string Role { get; set; } = string.Empty;
 

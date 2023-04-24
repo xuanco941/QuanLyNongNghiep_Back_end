@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using QuanLyNongNghiepAPI.DataTransferObject;
+using QuanLyNongNghiepAPI.DataTransferObject.UserDTOs;
 using QuanLyNongNghiepAPI.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -18,7 +18,7 @@ namespace QuanLyNongNghiepAPI.Services.Authentication
             _dbContext = dbContext;
             _config = config;
         }
-        public async Task<Models.User?> AuthenticateUserAsync(LoginModel login)
+        public async Task<Models.User?> AuthenticateUserAsync(LoginDTO login)
         {
             try
             {

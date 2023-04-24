@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using QuanLyNongNghiepAPI.Controllers;
-using QuanLyNongNghiepAPI.DataTransferObject;
 using QuanLyNongNghiepAPI.Models;
 
 namespace QuanLyNongNghiepAPI.Services.User
