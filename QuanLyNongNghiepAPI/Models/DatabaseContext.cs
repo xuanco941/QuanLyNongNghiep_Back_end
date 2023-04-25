@@ -8,6 +8,11 @@ namespace QuanLyNongNghiepAPI.Models
 
 
         public DbSet<User> Users { get; set; } = null!;
+        public DbSet<Category> Categories { get; set; } = null!;
+        public DbSet<Gateway> Gateways { get; set; } = null!;
+        public DbSet<Sensor> Sensors { get; set; } = null!;
+        public DbSet<SensorData> SensorDatas { get; set; } = null!;
+
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options, IConfiguration configuration)
     : base(options)
@@ -39,6 +44,20 @@ namespace QuanLyNongNghiepAPI.Models
             //.WithMany()
             //.HasForeignKey(t => t.GroupID)
             //.OnDelete(DeleteBehavior.SetNull);
+
+
+
+            //Gateway
+            modelBuilder.Entity<Gateway>(entity =>
+            {
+                entity.Property(e => e.CreateAt).HasDefaultValueSql("(getdate())");
+            });
+
+            //SensorData
+            modelBuilder.Entity<SensorData>(entity =>
+            {
+                entity.Property(e => e.CreateAt).HasDefaultValueSql("(getdate())");
+            });
 
         }
     }

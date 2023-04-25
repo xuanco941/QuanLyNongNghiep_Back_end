@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using QuanLyNongNghiepAPI.DataTransferObject.UserDTOs;
 using QuanLyNongNghiepAPI.Models;
+using QuanLyNongNghiepAPI.Services.User;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -12,11 +13,13 @@ namespace QuanLyNongNghiepAPI.Services.Authentication
     {
         private readonly DatabaseContext _dbContext;
         private readonly IConfiguration _config;
+        private readonly IUserService _userService;
 
-        public AuthenticationService(DatabaseContext dbContext, IConfiguration config)
+        public AuthenticationService(DatabaseContext dbContext, IConfiguration config, IUserService userService)
         {
             _dbContext = dbContext;
             _config = config;
+            _userService = userService;
         }
         public async Task<Models.User?> AuthenticateUserAsync(LoginDTO login)
         {
@@ -37,7 +40,7 @@ namespace QuanLyNongNghiepAPI.Services.Authentication
         {
             Random rand = new Random();
             string password = string.Empty;
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 4; i++)
             {
                 password = password + rand.Next(0, 10);
             }
@@ -77,7 +80,7 @@ namespace QuanLyNongNghiepAPI.Services.Authentication
         {
             Random rand = new Random();
             string password = string.Empty;
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 4; i++)
             {
                 password = password + rand.Next(0, 10);
             }
@@ -106,24 +109,33 @@ namespace QuanLyNongNghiepAPI.Services.Authentication
             }
         }
 
-        public async Task<bool> ChangePasswordAsync(int uid, ChangePasswordDTO changePassword)
+        public async Task<bool> ChangePasswordAsync(ChangePasswordDTO changePassword)
         {
             try
             {
-                Models.User? user = _dbContext.Users.FirstOrDefault(a => a.UserID == uid);
-                if (user != null)
+                int? userId = _userService.GetUserIDContext();
+                if (userId != null)
                 {
-                    user.Password = changePassword.NewPassword;
-                }
-                int num = await _dbContext.SaveChangesAsync();
-                if (num > 0)
-                {
-                    return true;
+                    Models.User? user = await _dbContext.Users.FirstOrDefaultAsync(a => a.UserID == userId);
+                    if (user != null)
+                    {
+                        user.Password = changePassword.NewPassword;
+                    }
+                    int num = await _dbContext.SaveChangesAsync();
+                    if (num > 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 else
                 {
                     return false;
                 }
+
             }
             catch
             {

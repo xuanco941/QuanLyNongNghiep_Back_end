@@ -19,18 +19,15 @@ namespace QuanLyNongNghiepAPI.Controllers
         private readonly IAuthenticationService _authenticationService;
         private readonly IConfiguration _config;
         private readonly ISendEmail _sendEmail;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
 
 
-
-        public AuthController(ILogger<AuthController> logger, IAuthenticationService authenticationService, IConfiguration config, ISendEmail sendEmail, IHttpContextAccessor httpContextAccessor)
+        public AuthController(ILogger<AuthController> logger, IAuthenticationService authenticationService, IConfiguration config, ISendEmail sendEmail)
         {
             _logger = logger;
             _authenticationService = authenticationService;
             _config = config;
             _sendEmail = sendEmail;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         [AllowAnonymous]
@@ -133,20 +130,9 @@ namespace QuanLyNongNghiepAPI.Controllers
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO changePassword)
         {
 
-            var httpContext = _httpContextAccessor.HttpContext;
-            string? userId = string.Empty;
-            if (httpContext != null && httpContext.User != null)
-            {
-                userId = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            }
-
             try
             {
-                bool isChange = false;
-                if (string.IsNullOrEmpty(userId) == false)
-                {
-                    isChange = await _authenticationService.ChangePasswordAsync(int.Parse(userId), changePassword);
-                }
+                bool isChange = await _authenticationService.ChangePasswordAsync(changePassword);
 
                 if (isChange == true)
                 {

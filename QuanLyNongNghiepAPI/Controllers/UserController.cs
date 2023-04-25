@@ -12,12 +12,10 @@ namespace QuanLyNongNghiepAPI.Controllers
     public class UserController
     {
         private readonly IUserService _userService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserController(IUserService userService, IHttpContextAccessor httpContextAccessor)
+        public UserController(IUserService userService)
         {
             _userService = userService;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         [Authorize]
@@ -26,25 +24,9 @@ namespace QuanLyNongNghiepAPI.Controllers
         {
             try
             {
-                var httpContext = _httpContextAccessor.HttpContext;
-                if (httpContext != null && httpContext.User != null)
-                {
-                    var userId = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                Models.User? user = await _userService.GetInfoUserContext();
+                return new OkObjectResult(new APIResponse<Models.User>(user, "success", true));
 
-                    if (userId != null)
-                    {
-                        Models.User? user = await _userService.GetAUser(int.Parse(userId));
-                        return new OkObjectResult(new APIResponse<Models.User>(user, "success", true));
-                    }
-                    else
-                    {
-                        return new OkObjectResult(new APIResponse<Models.User>(null, "Không tồn tại", false));
-                    }
-                }
-                else
-                {
-                    return new OkObjectResult(new APIResponse<Models.User>(null, "Không tồn tại", false));
-                }
             }
             catch
             {
@@ -60,32 +42,16 @@ namespace QuanLyNongNghiepAPI.Controllers
         {
             try
             {
-                var httpContext = _httpContextAccessor.HttpContext;
-                if (httpContext != null && httpContext.User != null)
+                bool isUpdate = await _userService.UpdateUserContext(update);
+                if (isUpdate == true)
                 {
-                    var userId = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
-                    if (userId != null)
-                    {
-                        bool isUpdate = await _userService.Update(int.Parse(userId), update);
-                        if(isUpdate == true)
-                        {
-                            return new OkObjectResult(new APIResponse<UpdateDTO>(update, "Cập nhật thành công.", true));
-                        }
-                        else
-                        {
-                            return new OkObjectResult(new APIResponse<UpdateDTO>(null, "Cập nhật không thành công.", false));
-                        }
-                    }
-                    else
-                    {
-                        return new OkObjectResult(new APIResponse<UpdateDTO>(null, "Người dùng không tồn tại.", false));
-                    }
+                    return new OkObjectResult(new APIResponse<UpdateDTO>(update, "Cập nhật thành công.", true));
                 }
                 else
                 {
-                    return new OkObjectResult(new APIResponse<UpdateDTO>(null, "Người dùng không tồn tại.", false));
+                    return new OkObjectResult(new APIResponse<UpdateDTO>(null, "Cập nhật không thành công.", false));
                 }
+
             }
             catch
             {

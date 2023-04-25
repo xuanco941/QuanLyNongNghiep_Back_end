@@ -43,6 +43,11 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 
 
 
+//http context
+builder.Services.AddHttpContextAccessor();
+
+
+
 //Cors
 builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
 {
@@ -70,8 +75,7 @@ builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 
 
-//http context
-builder.Services.AddHttpContextAccessor();
+
 
 
 

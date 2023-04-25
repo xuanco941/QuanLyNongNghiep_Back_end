@@ -1,58 +1,92 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuanLyNongNghiepAPI.DataTransferObject.UserDTOs;
 using QuanLyNongNghiepAPI.Models;
+using System.Security.Claims;
 
 namespace QuanLyNongNghiepAPI.Services.User
 {
     public class UserService : IUserService
     {
         private readonly DatabaseContext _dbContext;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService( DatabaseContext dbContext)
+        public UserService(DatabaseContext dbContext, IHttpContextAccessor httpContextAccessor)
         {
             _dbContext = dbContext;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        //get all user
-        public async Task<List<Models.User>> GetAllUserAsync()
+        public int? GetUserIDContext()
         {
-            try
+            
+            var httpContext = _httpContextAccessor.HttpContext;
+            string? userId = null;
+            if (httpContext != null && httpContext.User != null)
             {
-                return await _dbContext.Users.ToListAsync();
+                userId = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<Models.User?> GetAUser(int uid)
-        {
-            try
-            {
-                Models.User? u = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserID == uid);
-                return u;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> Update(int uid ,UpdateDTO updatedUser)
-        {
-            try
-            {
-                var existingUser = _dbContext.Users.Find(uid);
 
-                if (existingUser != null)
+            if (string.IsNullOrEmpty(userId) == false)
+            {
+                try
                 {
-                    existingUser.FullName = updatedUser.FullName;
-                    existingUser.Username = updatedUser.Username;
-                    existingUser.Email = updatedUser.Email;
-                    existingUser.PhoneNumber = updatedUser.PhoneNumber;
-                    existingUser.Address = updatedUser.Address;
+                    return int.Parse(userId);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public async Task<Models.User?> GetInfoUserContext()
+        {
+            try
+            {
+                int? userID = GetUserIDContext();
+                if (userID != null)
+                {
+                    Models.User? u = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserID == userID);
+                    return u;
+                }
+                else
+                {
+                    return null;
+                }
 
-                    await _dbContext.SaveChangesAsync();
-                    return true;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public async Task<bool> UpdateUserContext(UpdateDTO updatedUser)
+        {
+            try
+            {
+                int? userID = GetUserIDContext();
+                if (userID != null)
+                {
+                    var existingUser = await _dbContext.Users.FindAsync(userID);
+
+                    if (existingUser != null)
+                    {
+                        existingUser.FullName = updatedUser.FullName;
+                        existingUser.Username = updatedUser.Username;
+                        existingUser.Email = updatedUser.Email;
+                        existingUser.PhoneNumber = updatedUser.PhoneNumber;
+                        existingUser.Address = updatedUser.Address;
+
+                        await _dbContext.SaveChangesAsync();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 else
                 {
