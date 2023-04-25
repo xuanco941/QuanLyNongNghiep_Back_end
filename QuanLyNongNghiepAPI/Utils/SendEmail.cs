@@ -27,7 +27,7 @@ namespace QuanLyNongNghiepAPI.Utils
                 smtpClient.Credentials = new NetworkCredential(fromEmail, password);
                 smtpClient.EnableSsl = true;
                 smtpClient.UseDefaultCredentials = false;
-                smtpClient.Send(message);
+                await Task.Run(() => smtpClient.Send(message));
                 return true;
             }
             catch

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using QuanLyNongNghiepAPI.DataTransferObject.UserDTOs;
 using QuanLyNongNghiepAPI.Models;
 
 namespace QuanLyNongNghiepAPI.Services.User
@@ -36,6 +37,34 @@ namespace QuanLyNongNghiepAPI.Services.User
                 throw;
             }
         }
+        public async Task<bool> Update(int uid ,UpdateDTO updatedUser)
+        {
+            try
+            {
+                var existingUser = _dbContext.Users.Find(uid);
+
+                if (existingUser != null)
+                {
+                    existingUser.FullName = updatedUser.FullName;
+                    existingUser.Username = updatedUser.Username;
+                    existingUser.Email = updatedUser.Email;
+                    existingUser.PhoneNumber = updatedUser.PhoneNumber;
+                    existingUser.Address = updatedUser.Address;
+
+                    await _dbContext.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
 
     }
 

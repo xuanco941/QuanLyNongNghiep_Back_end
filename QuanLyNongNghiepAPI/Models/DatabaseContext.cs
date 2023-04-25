@@ -7,7 +7,7 @@ namespace QuanLyNongNghiepAPI.Models
         private readonly IConfiguration _configuration;
 
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> Users { get; set; } = null!;
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options, IConfiguration configuration)
     : base(options)

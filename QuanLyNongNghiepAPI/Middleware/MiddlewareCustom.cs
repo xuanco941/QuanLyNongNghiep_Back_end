@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 namespace QuanLyNongNghiepAPI.Middleware
 {
     // You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
-    public class AuthMiddleware
+    public class MiddlewareCustom
     {
         private readonly RequestDelegate _next;
 
-        public AuthMiddleware(RequestDelegate next)
+        public MiddlewareCustom(RequestDelegate next)
         {
             _next = next;
         }
@@ -22,11 +22,11 @@ namespace QuanLyNongNghiepAPI.Middleware
     }
 
     // Extension method used to add the middleware to the HTTP request pipeline.
-    public static class AuthMiddlewareExtensions
+    public static class MiddlewareCustomExtensions
     {
-        public static IApplicationBuilder UseAuthMiddleware(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseMiddlewareCustom(this IApplicationBuilder builder)
         {
-            return builder.UseMiddleware<AuthMiddleware>();
+            return builder.UseMiddleware<MiddlewareCustom>();
         }
     }
 }
