@@ -3,12 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using QuanLyNongNghiepAPI.DataTransferObject;
 using QuanLyNongNghiepAPI.DataTransferObject.UserDTOs;
 using QuanLyNongNghiepAPI.Services.User;
-using System.Security.Claims;
 
 namespace QuanLyNongNghiepAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class UserController
     {
         private readonly IUserService _userService;

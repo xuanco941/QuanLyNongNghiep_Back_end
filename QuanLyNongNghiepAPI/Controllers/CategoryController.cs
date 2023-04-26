@@ -2,14 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using QuanLyNongNghiepAPI.DataTransferObject;
 using QuanLyNongNghiepAPI.DataTransferObject.CategoryDTOs;
-using QuanLyNongNghiepAPI.DataTransferObject.UserDTOs;
 using QuanLyNongNghiepAPI.Services.Category;
 using QuanLyNongNghiepAPI.Services.User;
 
 namespace QuanLyNongNghiepAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class CategoryController
     {
         private readonly IUserService _userService;
