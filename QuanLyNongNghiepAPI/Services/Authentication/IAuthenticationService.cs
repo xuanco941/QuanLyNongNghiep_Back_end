@@ -4,10 +4,10 @@ namespace QuanLyNongNghiepAPI.Services.Authentication
 {
     public interface IAuthenticationService
     {
-        public Task<Models.User?> AuthenticateUserAsync(LoginDTO login);
-        public Task<Models.User?> RegisterUserAsync(RegisterDTO register);
-        public Task<Models.User?> ForgotPasswordAsync(ForgotPasswordDTO forgotPassword);
-        public Task<bool> ChangePasswordAsync(ChangePasswordDTO changePassword);
+        public Task<Models.User?> AuthenticateUserAsync(LoginModel login);
+        public Task<Models.User?> RegisterUserAsync(RegisterModel register);
+        public Task<Models.User?> ForgotPasswordAsync(ForgotPasswordModel forgotPassword);
+        public Task<bool> ChangePasswordAsync(int userId, ChangePasswordModel changePassword);
         public string GenerateTokenForUser(Models.User user);
     }
 }

@@ -1,6 +1,7 @@
-﻿namespace QuanLyNongNghiepAPI.DataTransferObject.UserDTOs
+﻿
+namespace QuanLyNongNghiepAPI.DataTransferObject.UserDTOs
 {
-    public class UpdateDTO
+    public class RegisterModel
     {
         public string FullName { get; set; } = string.Empty;
         public string Username { get; set; } = string.Empty;

@@ -13,15 +13,13 @@ namespace QuanLyNongNghiepAPI.Services.Authentication
     {
         private readonly DatabaseContext _dbContext;
         private readonly IConfiguration _config;
-        private readonly IUserService _userService;
 
-        public AuthenticationService(DatabaseContext dbContext, IConfiguration config, IUserService userService)
+        public AuthenticationService(DatabaseContext dbContext, IConfiguration config)
         {
             _dbContext = dbContext;
             _config = config;
-            _userService = userService;
         }
-        public async Task<Models.User?> AuthenticateUserAsync(LoginDTO login)
+        public async Task<Models.User?> AuthenticateUserAsync(LoginModel login)
         {
             try
             {
@@ -36,7 +34,7 @@ namespace QuanLyNongNghiepAPI.Services.Authentication
 
 
 
-        public async Task<Models.User?> RegisterUserAsync(RegisterDTO register)
+        public async Task<Models.User?> RegisterUserAsync(RegisterModel register)
         {
             Random rand = new Random();
             string password = string.Empty;
@@ -76,7 +74,7 @@ namespace QuanLyNongNghiepAPI.Services.Authentication
 
 
 
-        public async Task<Models.User?> ForgotPasswordAsync(ForgotPasswordDTO forgotPassword)
+        public async Task<Models.User?> ForgotPasswordAsync(ForgotPasswordModel forgotPassword)
         {
             Random rand = new Random();
             string password = string.Empty;
@@ -109,27 +107,19 @@ namespace QuanLyNongNghiepAPI.Services.Authentication
             }
         }
 
-        public async Task<bool> ChangePasswordAsync(ChangePasswordDTO changePassword)
+        public async Task<bool> ChangePasswordAsync(int userId, ChangePasswordModel changePassword)
         {
             try
             {
-                int? userId = _userService.GetUserIDContext();
-                if (userId != null)
+                Models.User? user = await _dbContext.Users.FirstOrDefaultAsync(a => a.UserID == userId);
+                if (user != null)
                 {
-                    Models.User? user = await _dbContext.Users.FirstOrDefaultAsync(a => a.UserID == userId);
-                    if (user != null)
-                    {
-                        user.Password = changePassword.NewPassword;
-                    }
-                    int num = await _dbContext.SaveChangesAsync();
-                    if (num > 0)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    user.Password = changePassword.NewPassword;
+                }
+                int num = await _dbContext.SaveChangesAsync();
+                if (num > 0)
+                {
+                    return true;
                 }
                 else
                 {

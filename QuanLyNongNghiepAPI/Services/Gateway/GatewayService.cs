@@ -3,7 +3,7 @@ using QuanLyNongNghiepAPI.Models;
 
 namespace QuanLyNongNghiepAPI.Services.Gateway
 {
-    public class GatewayService
+    public class GatewayService : IGatewayService
     {
         private readonly DatabaseContext _dbContext;
 
@@ -12,7 +12,7 @@ namespace QuanLyNongNghiepAPI.Services.Gateway
             _dbContext = dbContext;
         }
 
-        public async Task<bool> AddGateway(Models.Gateway gateway)
+        public async Task<bool> AddGateway(int userId,Models.Gateway gateway)
         {
             try
             {
@@ -25,7 +25,7 @@ namespace QuanLyNongNghiepAPI.Services.Gateway
             }
 
         }
-        public async Task<bool> UpdateGateway(Models.Gateway gateway, int uid)
+        public async Task<bool> UpdateGateway(Models.Gateway gateway)
         {
             try
             {
@@ -70,11 +70,11 @@ namespace QuanLyNongNghiepAPI.Services.Gateway
         //    //    return false;
         //    //}
         //}
-        public async Task<List<Models.Category>?> GetCategoriesOfUser(int uid)
+        public async Task<List<Models.Gateway>?> GetGatewayOfACategory(int categoryID)
         {
             try
             {
-                var category = await _dbContext.Categories.Where(c => c.UserID == uid).ToListAsync();
+                var category = await _dbContext.Gateways.Where(c => c.CategoryID == categoryID).ToListAsync();
                 if (category != null)
                 {
                     return category;

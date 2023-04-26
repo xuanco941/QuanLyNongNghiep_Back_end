@@ -63,7 +63,7 @@ namespace QuanLyNongNghiepAPI.Services.User
                 throw;
             }
         }
-        public async Task<bool> UpdateUserContext(UpdateDTO updatedUser)
+        public async Task<bool> UpdateUserContext(UpdateModel updatedUser)
         {
             try
             {
@@ -79,6 +79,7 @@ namespace QuanLyNongNghiepAPI.Services.User
                         existingUser.Email = updatedUser.Email;
                         existingUser.PhoneNumber = updatedUser.PhoneNumber;
                         existingUser.Address = updatedUser.Address;
+                        existingUser.Avatar = updatedUser.Avatar;
 
                         await _dbContext.SaveChangesAsync();
                         return true;
@@ -98,6 +99,28 @@ namespace QuanLyNongNghiepAPI.Services.User
                 return false;
             }
         }
+        public async Task<bool> DeleteAUser(int userId)
+        {
+            try
+            {
+                var user = await _dbContext.Users
+                .FirstOrDefaultAsync(c => c.UserID == userId);
+                if (user != null )
+                {
+                    _dbContext.Users.Remove(user);
+                    return await _dbContext.SaveChangesAsync() > 0;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
 
 
     }

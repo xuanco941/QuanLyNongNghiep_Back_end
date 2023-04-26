@@ -1,6 +1,6 @@
 ﻿namespace QuanLyNongNghiepAPI.DataTransferObject.UserDTOs
 {
-    public class ChangePasswordDTO
+    public class ChangePasswordModel
     {
         public string NewPassword { get; set; } = string.Empty;
     }

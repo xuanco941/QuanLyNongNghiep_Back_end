@@ -6,7 +6,8 @@ namespace QuanLyNongNghiepAPI.Services.User
     public interface IUserService
     {
         public Task<Models.User?> GetInfoUserContext();
-        public Task<bool> UpdateUserContext(UpdateDTO updatedUser);
+        public Task<bool> UpdateUserContext(UpdateModel updatedUser);
+        public Task<bool> DeleteAUser(int userId);
         public int? GetUserIDContext();
     }
 }

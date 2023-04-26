@@ -2,7 +2,7 @@
 
 namespace QuanLyNongNghiepAPI.Services.Sensor
 {
-    public class SensorService
+    public class SensorService : ISensorService
     {
         private readonly DatabaseContext _dbContext;
 

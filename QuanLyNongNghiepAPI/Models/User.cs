@@ -22,6 +22,7 @@ namespace QuanLyNongNghiepAPI.Models
         public string PhoneNumber { get; set; } = string.Empty;
         [StringLength(300)]
         public string Address { get; set; } = string.Empty;
+        public string Avatar { get; set; } = string.Empty;
         public string Role { get; set; } = "User";
 
     }
