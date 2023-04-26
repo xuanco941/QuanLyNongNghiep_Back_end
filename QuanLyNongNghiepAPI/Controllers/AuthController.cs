@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 namespace QuanLyNongNghiepAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("API/[controller]")]
     public class AuthController
     {
 

@@ -14,6 +14,6 @@ namespace QuanLyNongNghiepAPI.Models
         public string Symbol { get; set; } = "Assets//category.png";
         public DateTime CreateAt { get; set; }
         public int CategoryID { get; set; }
-        public Category Category { get; set; }
+        public Category Category { get; set; } = null!;
     }
 }

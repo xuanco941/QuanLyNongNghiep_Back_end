@@ -12,7 +12,8 @@ namespace QuanLyNongNghiepAPI.Models
         public string Address { get; set; } = string.Empty;
         public string Unit { get; set; } = string.Empty;
         public string Symbol { get; set; } = "Assets//category.png";
+        public DateTime CreateAt { get; set; }
         public int GatewayID { get; set; }
-        public Gateway Gateway { get; set; }
+        public Gateway Gateway { get; set; } = null!;
     }
 }

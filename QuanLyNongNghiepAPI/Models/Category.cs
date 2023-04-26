@@ -12,7 +12,7 @@ namespace QuanLyNongNghiepAPI.Models
         public string Description { get; set; } = string.Empty;
         public string Symbol { get; set; } = "Assets//category.png";
         public int UserID { get; set; }
-        public User User { get; set; }
+        public User User { get; set; } = null!;
 
     }
 }

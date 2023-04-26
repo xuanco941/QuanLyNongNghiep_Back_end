@@ -1,53 +1,29 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuanLyNongNghiepAPI.DataTransferObject;
-using QuanLyNongNghiepAPI.DataTransferObject.CategoryDTOs;
-using QuanLyNongNghiepAPI.Services.Category;
+using QuanLyNongNghiepAPI.DataTransferObject.GatewayDTOs;
+using QuanLyNongNghiepAPI.Services.Gateway;
 using QuanLyNongNghiepAPI.Services.User;
 
 namespace QuanLyNongNghiepAPI.Controllers
 {
-    [ApiController]
     [Route("API/[controller]")]
-    public class CategoryController
+    [ApiController]
+    public class GatewayController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly ICategoryService _categoryService;
+        private readonly IGatewayService _gatewayService;
 
-
-        public CategoryController(IUserService userService, ICategoryService categoryService)
+        public GatewayController(IUserService userService, IGatewayService gatewayService)
         {
             _userService = userService;
-            _categoryService = categoryService;
+            _gatewayService = gatewayService;
         }
 
 
         [Authorize]
-        [HttpGet("GetCategories")]
-        public async Task<IActionResult> GetCategories()
-        {
-            int? userId = _userService.GetUserIDContext();
-            if(userId == null)
-            {
-                return new UnauthorizedResult();
-            }
-
-            try
-            {
-                List<Models.Category>? categories = await _categoryService.GetCategories((int)userId);
-                return new OkObjectResult(new APIResponse<List< Models.Category>>(categories, "success", true));
-
-            }
-            catch
-            {
-                return new OkObjectResult(new APIResponse<List<Models.Category>>(null, "Lỗi truy vấn database.", false));
-            }
-        }
-
-
-        [Authorize]
-        [HttpGet("GetACategory/{categoryId}")]
-        public async Task<IActionResult> GetACategory(int categoryId)
+        [HttpGet("GetGateways/{categoryId}")]
+        public async Task<IActionResult> GetGateways(int categoryId)
         {
             int? userId = _userService.GetUserIDContext();
             if (userId == null)
@@ -57,22 +33,20 @@ namespace QuanLyNongNghiepAPI.Controllers
 
             try
             {
-                Models.Category? categories = await _categoryService.GetACategory((int)userId,categoryId);
-                return new OkObjectResult(new APIResponse<Models.Category>(categories, "success", true));
+                List<Models.Gateway>? objs = await _gatewayService.GetGateways((int)userId, categoryId);
+                return new OkObjectResult(new APIResponse<List<Models.Gateway>>(objs, "success", true));
 
             }
             catch
             {
-                return new OkObjectResult(new APIResponse<Models.Category>(null, "Lỗi truy vấn database.", false));
+                return new OkObjectResult(new APIResponse<List<Models.Gateway>>(null, "Lỗi truy vấn database.", false));
             }
         }
 
 
-
-
         [Authorize]
-        [HttpPost("AddCategory")]
-        public async Task<IActionResult> AddCategory([FromBody] AddCategoryModel addCategory)
+        [HttpGet("GetAGateway/{gatewayId}")]
+        public async Task<IActionResult> GetAGateway(int gatewayId)
         {
             int? userId = _userService.GetUserIDContext();
             if (userId == null)
@@ -82,7 +56,32 @@ namespace QuanLyNongNghiepAPI.Controllers
 
             try
             {
-                bool isUpdate = await _categoryService.AddCategory((int)userId, addCategory);
+                Models.Gateway? obj = await _gatewayService.GetAGateway((int)userId, gatewayId);
+                return new OkObjectResult(new APIResponse<Models.Gateway>(obj, "success", true));
+
+            }
+            catch
+            {
+                return new OkObjectResult(new APIResponse<Models.Gateway>(null, "Lỗi truy vấn database.", false));
+            }
+        }
+
+
+
+
+        [Authorize]
+        [HttpPost("AddGateway")]
+        public async Task<IActionResult> AddGateway([FromBody] AddGatewayModel addGateway)
+        {
+            int? userId = _userService.GetUserIDContext();
+            if (userId == null)
+            {
+                return new UnauthorizedResult();
+            }
+
+            try
+            {
+                bool isUpdate = await _gatewayService.AddGateway((int)userId, addGateway);
                 if (isUpdate == true)
                 {
                     return new OkObjectResult(new APIResponse<bool>(isUpdate, "Thêm thành công.", true));
@@ -101,10 +100,9 @@ namespace QuanLyNongNghiepAPI.Controllers
         }
 
 
-
         [Authorize]
-        [HttpPost("UpdateCategory")]
-        public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryModel updateCategory)
+        [HttpPost("UpdateGateway")]
+        public async Task<IActionResult> UpdateGateway([FromBody] UpdateGatewayModel updateGateway)
         {
             int? userId = _userService.GetUserIDContext();
             if (userId == null)
@@ -114,14 +112,14 @@ namespace QuanLyNongNghiepAPI.Controllers
 
             try
             {
-                bool isUpdate = await _categoryService.UpdateCategory((int)userId, updateCategory);
+                bool isUpdate = await _gatewayService.UpdateGateway((int)userId, updateGateway);
                 if (isUpdate == true)
                 {
                     return new OkObjectResult(new APIResponse<bool>(isUpdate, "Cập nhật thành công.", true));
                 }
                 else
                 {
-                    return new OkObjectResult(new APIResponse<bool>(false, "Cập nhật thất bại.", false));
+                    return new OkObjectResult(new APIResponse<bool>(false, "Cập nhật không thành công.", false));
                 }
 
             }
@@ -134,11 +132,9 @@ namespace QuanLyNongNghiepAPI.Controllers
 
 
 
-
-
         [Authorize]
-        [HttpPost("DeleteCategory")]
-        public async Task<IActionResult> UpdateCategory([FromBody] DeleteCategoryModel deleteCategory)
+        [HttpPost("DeleteGateway")]
+        public async Task<IActionResult> DeleteGateway([FromBody] DeleteGatewayModel deleteGateway)
         {
             int? userId = _userService.GetUserIDContext();
             if (userId == null)
@@ -148,14 +144,14 @@ namespace QuanLyNongNghiepAPI.Controllers
 
             try
             {
-                bool isDelete = await _categoryService.DeleteCategory((int)userId, deleteCategory);
-                if (isDelete == true)
+                bool isUpdate = await _gatewayService.DeleteGateway((int)userId, deleteGateway);
+                if (isUpdate == true)
                 {
-                    return new OkObjectResult(new APIResponse<bool>(isDelete, "Xóa thành công.", true));
+                    return new OkObjectResult(new APIResponse<bool>(isUpdate, "Xóa thành công.", true));
                 }
                 else
                 {
-                    return new OkObjectResult(new APIResponse<bool>(false, "Xóa thất bại.", false));
+                    return new OkObjectResult(new APIResponse<bool>(false, "Xóa không thành công.", false));
                 }
 
             }
@@ -165,6 +161,7 @@ namespace QuanLyNongNghiepAPI.Controllers
             }
 
         }
+
 
 
 

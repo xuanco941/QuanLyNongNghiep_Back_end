@@ -7,7 +7,7 @@ using QuanLyNongNghiepAPI.Services.User;
 namespace QuanLyNongNghiepAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("API/[controller]")]
     public class UserController
     {
         private readonly IUserService _userService;

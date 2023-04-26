@@ -2,5 +2,6 @@
 {
     public class DeleteSensorModel
     {
+        public int SensorID { get; set; }
     }
 }

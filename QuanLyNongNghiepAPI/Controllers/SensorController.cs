@@ -4,7 +4,7 @@
 
 namespace QuanLyNongNghiepAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("API/[controller]")]
     [ApiController]
     public class SensorController : ControllerBase
     {

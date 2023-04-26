@@ -77,7 +77,7 @@ namespace QuanLyNongNghiepAPI.Services.Category
                 return false;
             }
         }
-        public async Task<List<Models.Category>?> GetCategoriesOfUser(int userId)
+        public async Task<List<Models.Category>?> GetCategories(int userId)
         {
             try
             {
@@ -97,6 +97,28 @@ namespace QuanLyNongNghiepAPI.Services.Category
                 return null;
             }
         }
+
+        public async Task<Models.Category?> GetACategory(int userId, int categoryId)
+        {
+            try
+            {
+                var category = await _dbContext.Categories.Where(c => c.UserID == userId && c.CategoryID == categoryId).FirstOrDefaultAsync();
+                if (category != null)
+                {
+                    return category;
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
 
 
 

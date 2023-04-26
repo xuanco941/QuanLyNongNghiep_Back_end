@@ -11,6 +11,6 @@ namespace QuanLyNongNghiepAPI.Models
         public double Value { get; set; }
         public DateTime CreateAt { get; set; }
         public int SensorID { get; set; }
-        public Sensor Sensor { get; set; }
+        public Sensor Sensor { get; set; } = null!;
     }
 }
