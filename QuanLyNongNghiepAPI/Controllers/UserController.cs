@@ -39,24 +39,24 @@ namespace QuanLyNongNghiepAPI.Controllers
 
         [Authorize]
         [HttpPost("Update")]
-        public async Task<IActionResult> Update([FromBody] UpdateModel update)
+        public async Task<IActionResult> Update([FromBody] UpdateUserModel update)
         {
             try
             {
                 bool isUpdate = await _userService.UpdateUserContext(update);
                 if (isUpdate == true)
                 {
-                    return new OkObjectResult(new APIResponse<UpdateModel>(update, "Cập nhật thành công.", true));
+                    return new OkObjectResult(new APIResponse<UpdateUserModel>(update, "Cập nhật thành công.", true));
                 }
                 else
                 {
-                    return new OkObjectResult(new APIResponse<UpdateModel>(null, "Cập nhật không thành công.", false));
+                    return new OkObjectResult(new APIResponse<UpdateUserModel>(null, "Cập nhật không thành công.", false));
                 }
 
             }
             catch
             {
-                return new OkObjectResult(new APIResponse<UpdateModel>(null, "Lỗi truy vấn.", false));
+                return new OkObjectResult(new APIResponse<UpdateUserModel>(null, "Lỗi truy vấn.", false));
             }
 
         }

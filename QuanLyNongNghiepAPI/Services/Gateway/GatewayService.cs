@@ -28,6 +28,7 @@ namespace QuanLyNongNghiepAPI.Services.Gateway
                 gateway.Address = addGateway.Address;
                 gateway.CategoryID = addGateway.CategoryID;
                 gateway.Location = addGateway.Location;
+                gateway.Description = addGateway.Description;
                 gateway.Name = addGateway.Name;
                 gateway.Symbol = addGateway.Symbol;
                 await _dbContext.Gateways.AddAsync(gateway);
@@ -51,6 +52,7 @@ namespace QuanLyNongNghiepAPI.Services.Gateway
 
                 existingGateway.Location = updateGateway.Location;
                 existingGateway.Address = updateGateway.Address;
+                existingGateway.Description = updateGateway.Description;
                 existingGateway.Name = updateGateway.Name;
                 existingGateway.Symbol = updateGateway.Symbol;
 

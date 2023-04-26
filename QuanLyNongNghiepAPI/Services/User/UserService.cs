@@ -63,7 +63,7 @@ namespace QuanLyNongNghiepAPI.Services.User
                 throw;
             }
         }
-        public async Task<bool> UpdateUserContext(UpdateModel updatedUser)
+        public async Task<bool> UpdateUserContext(UpdateUserModel updatedUser)
         {
             try
             {

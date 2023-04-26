@@ -80,7 +80,7 @@ builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IGatewayService, GatewayService>();
-//builder.Services.AddTransient<ISensorService, SensorService>();
+builder.Services.AddTransient<ISensorService, SensorService>();
 builder.Services.AddTransient<ISensorDataService, SensorDataService>();
 
 
