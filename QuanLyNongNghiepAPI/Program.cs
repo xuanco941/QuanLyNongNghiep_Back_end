@@ -63,6 +63,7 @@ builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
 
 //service config
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+builder.Services.AddSingleton<IWebHostEnvironment>(builder.Environment);
 
 
 

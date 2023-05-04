@@ -37,9 +37,9 @@ namespace QuanLyNongNghiepAPI.Controllers
                 return new OkObjectResult(new APIResponse<List<Models.Gateway>>(objs, "success", true));
 
             }
-            catch
+            catch(Exception e)
             {
-                return new OkObjectResult(new APIResponse<List<Models.Gateway>>(null, "Lỗi truy vấn database.", false));
+                return new BadRequestObjectResult(new APIResponse<List<Models.Gateway>>(null, e.Message, false));
             }
         }
 
@@ -60,9 +60,9 @@ namespace QuanLyNongNghiepAPI.Controllers
                 return new OkObjectResult(new APIResponse<Models.Gateway>(obj, "success", true));
 
             }
-            catch
+            catch(Exception e)
             {
-                return new OkObjectResult(new APIResponse<Models.Gateway>(null, "Lỗi truy vấn database.", false));
+                return new OkObjectResult(new APIResponse<Models.Gateway>(null, e.Message, false));
             }
         }
 
@@ -88,13 +88,13 @@ namespace QuanLyNongNghiepAPI.Controllers
                 }
                 else
                 {
-                    return new OkObjectResult(new APIResponse<bool>(false, "Thêm không thành công.", false));
+                    return new BadRequestObjectResult(new APIResponse<bool>(false, "Thêm không thành công.", false));
                 }
 
             }
             catch
             {
-                return new OkObjectResult(new APIResponse<bool>(false, "Lỗi truy vấn.", false));
+                return new BadRequestObjectResult(new APIResponse<bool>(false, "Lỗi truy vấn.", false));
             }
 
         }
@@ -110,6 +110,11 @@ namespace QuanLyNongNghiepAPI.Controllers
                 return new UnauthorizedResult();
             }
 
+            if (updateGateway.GatewayID == null)
+            {
+                return new BadRequestObjectResult(new APIResponse<string>(null, "ID trống.", false));
+            }
+
             try
             {
                 bool isUpdate = await _gatewayService.UpdateGateway((int)userId, updateGateway);
@@ -119,13 +124,13 @@ namespace QuanLyNongNghiepAPI.Controllers
                 }
                 else
                 {
-                    return new OkObjectResult(new APIResponse<bool>(false, "Cập nhật không thành công.", false));
+                    return new BadRequestObjectResult(new APIResponse<bool>(false, "Cập nhật không thành công.", false));
                 }
 
             }
             catch
             {
-                return new OkObjectResult(new APIResponse<bool>(false, "Lỗi truy vấn.", false));
+                return new BadRequestObjectResult(new APIResponse<bool>(false, "Lỗi truy vấn.", false));
             }
 
         }
@@ -142,6 +147,11 @@ namespace QuanLyNongNghiepAPI.Controllers
                 return new UnauthorizedResult();
             }
 
+            if (deleteGateway.GatewayID == null)
+            {
+                return new BadRequestObjectResult(new APIResponse<string>(null, "ID trống.", false));
+            }
+
             try
             {
                 bool isUpdate = await _gatewayService.DeleteGateway((int)userId, deleteGateway);
@@ -151,13 +161,13 @@ namespace QuanLyNongNghiepAPI.Controllers
                 }
                 else
                 {
-                    return new OkObjectResult(new APIResponse<bool>(false, "Xóa không thành công.", false));
+                    return new BadRequestObjectResult(new APIResponse<bool>(false, "Xóa không thành công.", false));
                 }
 
             }
             catch
             {
-                return new OkObjectResult(new APIResponse<bool>(false, "Lỗi truy vấn.", false));
+                return new BadRequestObjectResult(new APIResponse<bool>(false, "Lỗi truy vấn.", false));
             }
 
         }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Win32;
 using QuanLyNongNghiepAPI.DataTransferObject;
 using QuanLyNongNghiepAPI.DataTransferObject.UserDTOs;
 using QuanLyNongNghiepAPI.Models;
@@ -35,6 +36,12 @@ namespace QuanLyNongNghiepAPI.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginModel login)
         {
+
+            if(string.IsNullOrEmpty(login.Username) || string.IsNullOrEmpty(login.Password))
+            {
+                return new BadRequestObjectResult(new APIResponse<string>(null, "Tài khoản hoặc mật khẩu không được để trống.", false));
+            }
+
             try
             {
                 User? user = await _authenticationService.AuthenticateUserAsync(login);
@@ -46,7 +53,7 @@ namespace QuanLyNongNghiepAPI.Controllers
                 }
                 else
                 {
-                    return new OkObjectResult(new APIResponse<string>(null, "Tài khoản hoặc mật khẩu không chính xác.", false));
+                    return new NotFoundObjectResult(new APIResponse<string>(null, "Tài khoản hoặc mật khẩu không chính xác.", false));
                 }
             }
             catch
@@ -60,6 +67,12 @@ namespace QuanLyNongNghiepAPI.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel register)
         {
+
+            if (string.IsNullOrEmpty(register.Username) || string.IsNullOrEmpty(register.Email))
+            {
+                return new BadRequestObjectResult(new APIResponse<string>(null, "Username hoặc Email không được để trống.", false));
+            }
+
             string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
             if (Regex.IsMatch(register.Email, pattern))
             {
@@ -76,22 +89,22 @@ namespace QuanLyNongNghiepAPI.Controllers
                         else
                         {
                             await _userService.DeleteAUser(user.UserID);
-                            return new OkObjectResult(new APIResponse<bool>(false, "Lỗi hệ thống, vui lòng đăng ký lại sau.", false));
+                            return new NotFoundObjectResult(new APIResponse<bool>(false, "Lỗi hệ thống, vui lòng đăng ký lại sau.", false));
                         }
                     }
                     else
                     {
-                        return new OkObjectResult(new APIResponse<bool>(false, "Tạo tài khoản thất bại.", false));
+                        return new NotFoundObjectResult(new APIResponse<bool>(false, "Tạo tài khoản thất bại.", false));
                     }
                 }
                 catch
                 {
-                    return new OkObjectResult(new APIResponse<bool>(false, "Tạo tài khoản thất bại.", false));
+                    return new BadRequestObjectResult(new APIResponse<bool>(false, "Tạo tài khoản thất bại.", false));
                 }
             }
             else
             {
-                return new OkObjectResult(new APIResponse<bool>(false, "Email không hợp lệ", false));
+                return new BadRequestObjectResult(new APIResponse<bool>(false, "Email không hợp lệ", false));
             }
 
         }
@@ -101,6 +114,11 @@ namespace QuanLyNongNghiepAPI.Controllers
         [HttpPost("ForgotPassword")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordModel forgotPassword)
         {
+            if (string.IsNullOrEmpty(forgotPassword.Username))
+            {
+                return new BadRequestObjectResult(new APIResponse<string>(null, "Username không được để trống.", false));
+            }
+
             try
             {
                 User? user = await _authenticationService.ForgotPasswordAsync(forgotPassword);
@@ -113,17 +131,17 @@ namespace QuanLyNongNghiepAPI.Controllers
                     }
                     else
                     {
-                        return new OkObjectResult(new APIResponse<bool>(false, "Đặt lại mật khẩu thành công, mật khẩu chưa được gửi về email.", false));
+                        return new BadRequestObjectResult(new APIResponse<bool>(false, "Đặt lại mật khẩu thành công, mật khẩu chưa được gửi về email.", false));
                     }
                 }
                 else
                 {
-                    return new OkObjectResult(new APIResponse<bool>(false, "Đặt lại mật khẩu thất bại.", false));
+                    return new NotFoundObjectResult(new APIResponse<bool>(false, "Đặt lại mật khẩu thất bại.", false));
                 }
             }
             catch
             {
-                return new OkObjectResult(new APIResponse<bool>(false, "Đặt lại mật khẩu thất bại.", false));
+                return new BadRequestObjectResult(new APIResponse<bool>(false, "Đặt lại mật khẩu thất bại.", false));
             }
         }
 
@@ -137,6 +155,12 @@ namespace QuanLyNongNghiepAPI.Controllers
             {
                 return new UnauthorizedResult();
             }
+
+            if (string.IsNullOrEmpty(changePassword.NewPassword))
+            {
+                return new BadRequestObjectResult(new APIResponse<string>(null, "Mật khẩu mới không được để trống.", false));
+            }
+
             try
             {
                 bool isChange = await _authenticationService.ChangePasswordAsync((int)userId, changePassword);
@@ -148,12 +172,12 @@ namespace QuanLyNongNghiepAPI.Controllers
                 }
                 else
                 {
-                    return new OkObjectResult(new APIResponse<bool>(false, "Thay đổi mật khẩu thất bại.", false));
+                    return new BadRequestObjectResult(new APIResponse<bool>(false, "Thay đổi mật khẩu thất bại.", false));
                 }
             }
             catch
             {
-                return new OkObjectResult(new APIResponse<bool>(false, "Thay đổi mật khẩu thất bại.", false));
+                return new BadRequestObjectResult(new APIResponse<bool>(false, "Thay đổi mật khẩu thất bại.", false));
             }
         }
 

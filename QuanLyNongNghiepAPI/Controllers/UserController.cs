@@ -11,10 +11,12 @@ namespace QuanLyNongNghiepAPI.Controllers
     public class UserController
     {
         private readonly IUserService _userService;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IWebHostEnvironment hostEnvironment)
         {
             _userService = userService;
+            _hostingEnvironment = hostEnvironment;
         }
 
         [Authorize]
@@ -25,13 +27,32 @@ namespace QuanLyNongNghiepAPI.Controllers
             {
                 Models.User? user = await _userService.GetInfoUserContext();
 
-                var objectUser = user != null ? new { FullName = user.FullName , Username = user.Username, Email = user.Email, PhoneNumber = user.PhoneNumber, Address = user.Address, Avatar = user.Avatar } : null;
+
+                string imageDataUrl = string.Empty;
+
+                if (user != null && string.IsNullOrEmpty(user.Avatar) == false)
+                {
+                    try
+                    {
+                        var imageBytes = System.IO.File.ReadAllBytes(user.Avatar);
+                        var base64String = Convert.ToBase64String(imageBytes);
+                        imageDataUrl = $"data:image/jpeg;base64,{base64String}";
+                    }
+                    catch
+                    {
+
+                    }
+
+                }
+
+
+                var objectUser = user != null ? new { FullName = user.FullName, Username = user.Username, Email = user.Email, PhoneNumber = user.PhoneNumber, Address = user.Address, Avatar = imageDataUrl } : null;
                 return new OkObjectResult(new APIResponse<object>(objectUser, "success", true));
 
             }
-            catch
+            catch (Exception e)
             {
-                return new OkObjectResult(new APIResponse<object>(null, "Lỗi truy vấn database", false));
+                return new NotFoundObjectResult(new APIResponse<object>(null, e.Message, false));
             }
 
         }
@@ -41,6 +62,17 @@ namespace QuanLyNongNghiepAPI.Controllers
         [HttpPost("Update")]
         public async Task<IActionResult> Update([FromBody] UpdateUserModel update)
         {
+            if (string.IsNullOrEmpty(update.Avatar) == false)
+            {
+                var bytes = Convert.FromBase64String(update.Avatar);
+                var fileName = Guid.NewGuid().ToString() + ".jpg";
+                var filePath = Path.Combine(_hostingEnvironment.WebRootPath, $"uploads", fileName);
+                System.IO.File.WriteAllBytes(filePath, bytes);
+
+                update.Avatar = filePath;
+            }
+
+
             try
             {
                 bool isUpdate = await _userService.UpdateUserContext(update);
@@ -50,13 +82,13 @@ namespace QuanLyNongNghiepAPI.Controllers
                 }
                 else
                 {
-                    return new OkObjectResult(new APIResponse<UpdateUserModel>(null, "Cập nhật không thành công.", false));
+                    return new BadRequestObjectResult(new APIResponse<UpdateUserModel>(null, "Cập nhật không thành công.", false));
                 }
 
             }
-            catch
+            catch (Exception e)
             {
-                return new OkObjectResult(new APIResponse<UpdateUserModel>(null, "Lỗi truy vấn.", false));
+                return new BadRequestObjectResult(new APIResponse<UpdateUserModel>(null, e.Message, false));
             }
 
         }

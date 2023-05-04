@@ -55,6 +55,7 @@ namespace QuanLyNongNghiepAPI.Controllers
                 return new UnauthorizedResult();
             }
 
+
             try
             {
                 Models.Category? categories = await _categoryService.GetACategory((int)userId,categoryId);
@@ -63,7 +64,7 @@ namespace QuanLyNongNghiepAPI.Controllers
             }
             catch
             {
-                return new OkObjectResult(new APIResponse<Models.Category>(null, "Lỗi truy vấn database.", false));
+                return new BadRequestObjectResult(new APIResponse<Models.Category>(null, "Lỗi truy vấn database.", false));
             }
         }
 
@@ -80,6 +81,12 @@ namespace QuanLyNongNghiepAPI.Controllers
                 return new UnauthorizedResult();
             }
 
+            if (string.IsNullOrEmpty(addCategory.Name))
+            {
+                return new BadRequestObjectResult(new APIResponse<string>(null, "Tên không được để trống.", false));
+            }
+
+
             try
             {
                 bool isUpdate = await _categoryService.AddCategory((int)userId, addCategory);
@@ -89,13 +96,13 @@ namespace QuanLyNongNghiepAPI.Controllers
                 }
                 else
                 {
-                    return new OkObjectResult(new APIResponse<bool>(false, "Thêm không thành công.", false));
+                    return new BadRequestObjectResult(new APIResponse<bool>(false, "Thêm không thành công.", false));
                 }
 
             }
             catch
             {
-                return new OkObjectResult(new APIResponse<bool>(false, "Lỗi truy vấn.", false));
+                return new BadRequestObjectResult(new APIResponse<bool>(false, "Lỗi truy vấn.", false));
             }
 
         }
@@ -112,6 +119,11 @@ namespace QuanLyNongNghiepAPI.Controllers
                 return new UnauthorizedResult();
             }
 
+            if (string.IsNullOrEmpty(updateCategory.Name) || updateCategory.CategoryID == null)
+            {
+                return new BadRequestObjectResult(new APIResponse<string>(null, "Tên hoặc ID trống.", false));
+            }
+
             try
             {
                 bool isUpdate = await _categoryService.UpdateCategory((int)userId, updateCategory);
@@ -121,13 +133,13 @@ namespace QuanLyNongNghiepAPI.Controllers
                 }
                 else
                 {
-                    return new OkObjectResult(new APIResponse<bool>(false, "Cập nhật thất bại.", false));
+                    return new NotFoundObjectResult(new APIResponse<bool>(false, "Cập nhật thất bại.", false));
                 }
 
             }
             catch
             {
-                return new OkObjectResult(new APIResponse<bool>(false, "Lỗi truy vấn.", false));
+                return new BadRequestObjectResult(new APIResponse<bool>(false, "Lỗi truy vấn.", false));
             }
 
         }
@@ -144,6 +156,11 @@ namespace QuanLyNongNghiepAPI.Controllers
             if (userId == null)
             {
                 return new UnauthorizedResult();
+            }
+
+            if (deleteCategory.CategoryID == null)
+            {
+                return new BadRequestObjectResult(new APIResponse<string>(null, "ID trống.", false));
             }
 
             try

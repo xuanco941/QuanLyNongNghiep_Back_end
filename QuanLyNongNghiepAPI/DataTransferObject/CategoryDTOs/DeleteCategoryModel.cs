@@ -2,6 +2,6 @@
 {
     public class DeleteCategoryModel
     {
-        public int CategoryID { get; set; }
+        public int? CategoryID { get; set; }
     }
 }

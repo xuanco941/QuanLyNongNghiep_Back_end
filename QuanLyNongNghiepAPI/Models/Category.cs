@@ -10,7 +10,7 @@ namespace QuanLyNongNghiepAPI.Models
         public int CategoryID { get; set; }
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; } = string.Empty;
-        public byte[]? Symbol { get; set; }
+        public string? Symbol { get; set; } = string.Empty;
         public int UserID { get; set; }
         public User User { get; set; } = null!;
 

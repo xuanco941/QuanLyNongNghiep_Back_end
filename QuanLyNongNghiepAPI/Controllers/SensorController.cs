@@ -39,9 +39,9 @@ namespace QuanLyNongNghiepAPI.Controllers
                 return new OkObjectResult(new APIResponse<List<Models.Sensor>>(objs, "success", true));
 
             }
-            catch
+            catch(Exception e)
             {
-                return new OkObjectResult(new APIResponse<List<Models.Sensor>>(null, "Lỗi truy vấn database.", false));
+                return new BadRequestObjectResult(new APIResponse<List<Models.Sensor>>(null, e.Message, false));
             }
         }
 
@@ -63,9 +63,9 @@ namespace QuanLyNongNghiepAPI.Controllers
                 return new OkObjectResult(new APIResponse<Models.Sensor>(obj, "success", true));
 
             }
-            catch
+            catch(Exception e)
             {
-                return new OkObjectResult(new APIResponse<Models.Sensor>(null, "Lỗi truy vấn database.", false));
+                return new BadRequestObjectResult(new APIResponse<Models.Sensor>(null, e.Message, false));
             }
         }
 
@@ -90,13 +90,13 @@ namespace QuanLyNongNghiepAPI.Controllers
                 }
                 else
                 {
-                    return new OkObjectResult(new APIResponse<bool>(false, "Thêm không thành công.", false));
+                    return new BadRequestObjectResult(new APIResponse<bool>(false, "Thêm không thành công.", false));
                 }
 
             }
             catch
             {
-                return new OkObjectResult(new APIResponse<bool>(false, "Lỗi truy vấn.", false));
+                return new BadRequestObjectResult(new APIResponse<bool>(false, "Lỗi truy vấn.", false));
             }
 
         }
@@ -123,13 +123,13 @@ namespace QuanLyNongNghiepAPI.Controllers
                 }
                 else
                 {
-                    return new OkObjectResult(new APIResponse<bool>(false, "Cập nhật không thành công.", false));
+                    return new BadRequestObjectResult(new APIResponse<bool>(false, "Cập nhật không thành công.", false));
                 }
 
             }
-            catch
+            catch(Exception e)
             {
-                return new OkObjectResult(new APIResponse<bool>(false, "Lỗi truy vấn.", false));
+                return new BadRequestObjectResult(new APIResponse<bool>(false, e.Message, false));
             }
 
         }

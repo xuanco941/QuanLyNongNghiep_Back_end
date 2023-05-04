@@ -2,6 +2,6 @@
 {
     public class DeleteGatewayModel
     {
-        public int GatewayID { get; set; }
+        public int? GatewayID { get; set; }
     }
 }
