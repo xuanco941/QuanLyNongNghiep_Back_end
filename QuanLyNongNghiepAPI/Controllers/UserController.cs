@@ -32,17 +32,9 @@ namespace QuanLyNongNghiepAPI.Controllers
 
                 if (user != null && string.IsNullOrEmpty(user.Avatar) == false)
                 {
-                    try
-                    {
-                        var imageBytes = System.IO.File.ReadAllBytes(user.Avatar);
-                        var base64String = Convert.ToBase64String(imageBytes);
-                        imageDataUrl = $"data:image/jpeg;base64,{base64String}";
-                    }
-                    catch
-                    {
-
-                    }
-
+                    var imageBytes = System.IO.File.ReadAllBytes(user.Avatar);
+                    var base64String = Convert.ToBase64String(imageBytes);
+                    imageDataUrl = $"data:image/jpeg;base64,{base64String}";
                 }
 
 
@@ -62,19 +54,18 @@ namespace QuanLyNongNghiepAPI.Controllers
         [HttpPost("Update")]
         public async Task<IActionResult> Update([FromBody] UpdateUserModel update)
         {
-            if (string.IsNullOrEmpty(update.Avatar) == false)
-            {
-                var bytes = Convert.FromBase64String(update.Avatar);
-                var fileName = Guid.NewGuid().ToString() + ".jpg";
-                var filePath = Path.Combine(_hostingEnvironment.WebRootPath, $"uploads", fileName);
-                System.IO.File.WriteAllBytes(filePath, bytes);
-
-                update.Avatar = filePath;
-            }
-
-
             try
             {
+                if (string.IsNullOrEmpty(update.Avatar) == false)
+                {
+                    var bytes = Convert.FromBase64String(update.Avatar);
+                    var fileName = Guid.NewGuid().ToString() + ".jpg";
+                    var filePath = Path.Combine(_hostingEnvironment.WebRootPath, $"uploads", fileName);
+                    System.IO.File.WriteAllBytes(filePath, bytes);
+
+                    update.Avatar = filePath;
+                }
+
                 bool isUpdate = await _userService.UpdateUserContext(update);
                 if (isUpdate == true)
                 {
