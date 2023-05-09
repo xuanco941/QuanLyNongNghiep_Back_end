@@ -1,13 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuanLyNongNghiepAPI.Models
 {
-    [Table("User")]
-    public class User
+    [Table("Admin")]
+    public class Admin
     {
         [Key]
-        public int UserID { get; set; }
+        public int AdminID { get; set; }
         [StringLength(50)]
         public string FullName { get; set; } = string.Empty;
         [Required]
@@ -24,8 +24,7 @@ namespace QuanLyNongNghiepAPI.Models
         [StringLength(300)]
         public string? Address { get; set; } = string.Empty;
         public string? Avatar { get; set; } = string.Empty;
-        public string Role { get; set; } = "User";
-        public List<Area>? Areas { get; set; } = null;
+        public string Role { get; set; } = "Admin";
 
     }
 }

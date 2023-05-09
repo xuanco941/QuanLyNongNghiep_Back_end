@@ -3,18 +3,19 @@ using System.ComponentModel.DataAnnotations;
 
 namespace QuanLyNongNghiepAPI.Models
 {
-    [Table("Gateway")]
-    public class Gateway
+    [Table("System")]
+    public class System
     {
         [Key]
-        public int GatewayID { get; set; }
+        public int SystemID { get; set; }
+        [Required]
         public string Address { get; set; } = string.Empty;
         public string? Location { get; set; } = string.Empty;
         public string? Description { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string? Symbol { get; set; } = string.Empty;
-        public DateTime CreateAt { get; set; }
-        public int CategoryID { get; set; }
-        public Category Category { get; set; } = null!;
+        public DateTime UpdateAt { get; set; }
+        public int AreaID { get; set; }
+        public Area Area { get; set; } = null!;
     }
 }

@@ -7,19 +7,19 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace QuanLyNongNghiepAPI.Services.Authentication
+namespace QuanLyNongNghiepAPI.Services.AuthenticationUser
 {
-    public class AuthenticationService : IAuthenticationService
+    public class AuthenticationUserService : IAuthenticationUserService
     {
         private readonly DatabaseContext _dbContext;
         private readonly IConfiguration _config;
 
-        public AuthenticationService(DatabaseContext dbContext, IConfiguration config)
+        public AuthenticationUserService(DatabaseContext dbContext, IConfiguration config)
         {
             _dbContext = dbContext;
             _config = config;
         }
-        public async Task<Models.User?> AuthenticateUserAsync(LoginModel login)
+        public async Task<Models.User?> AuthenticateAsync(LoginModel login)
         {
             try
             {
@@ -34,7 +34,7 @@ namespace QuanLyNongNghiepAPI.Services.Authentication
 
 
 
-        public async Task<Models.User?> RegisterUserAsync(RegisterModel register)
+        public async Task<Models.User?> RegisterAsync(RegisterModel register)
         {
             Random rand = new Random();
             string password = string.Empty;
@@ -143,7 +143,7 @@ namespace QuanLyNongNghiepAPI.Services.Authentication
 
 
 
-        public string GenerateTokenForUser(Models.User user)
+        public string GenerateToken(Models.User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_config["Jwt:SecretKey"]);

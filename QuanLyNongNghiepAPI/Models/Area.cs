@@ -3,16 +3,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace QuanLyNongNghiepAPI.Models
 {
-    [Table("Category")]
-    public class Category
+    [Table("Area")]
+    public class Area
     {
         [Key]
-        public int CategoryID { get; set; }
+        public int AreaID { get; set; }
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; } = string.Empty;
         public string? Symbol { get; set; } = string.Empty;
-        public int UserID { get; set; }
-        public User User { get; set; } = null!;
+        public DateTime UpdateAt { get; set; }
+
 
     }
 }

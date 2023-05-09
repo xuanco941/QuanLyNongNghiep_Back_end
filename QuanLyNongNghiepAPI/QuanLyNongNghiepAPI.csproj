@@ -22,4 +22,15 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.29.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Admin\" />
+    <Folder Include="Services\Guest\" />
+    <Folder Include="Services\AuthenticationAdmin\" />
+    <Folder Include="Services\AuthenticationGuest\" />
+    <Folder Include="Services\SystemProcess\" />
+    <Folder Include="Services\ResponseGateway\" />
+    <Folder Include="Services\ProcessCondition\" />
+    <Folder Include="Services\Process\" />
+  </ItemGroup>
+
 </Project>

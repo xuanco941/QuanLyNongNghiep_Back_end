@@ -4,7 +4,7 @@ using Microsoft.Win32;
 using QuanLyNongNghiepAPI.DataTransferObject;
 using QuanLyNongNghiepAPI.DataTransferObject.UserDTOs;
 using QuanLyNongNghiepAPI.Models;
-using QuanLyNongNghiepAPI.Services.Authentication;
+using QuanLyNongNghiepAPI.Services.AuthenticationUser;
 using QuanLyNongNghiepAPI.Services.User;
 using QuanLyNongNghiepAPI.Utils;
 using System.Text.RegularExpressions;
@@ -13,18 +13,18 @@ namespace QuanLyNongNghiepAPI.Controllers
 {
     [ApiController]
     [Route("API/[controller]")]
-    public class AuthController
+    public class AuthUserController
     {
 
-        private readonly ILogger<AuthController> _logger;
-        private readonly IAuthenticationService _authenticationService;
+        private readonly ILogger<AuthUserController> _logger;
+        private readonly IAuthenticationUserService _authenticationService;
         private readonly ISendEmail _sendEmail;
         private readonly IUserService _userService;
 
 
 
 
-        public AuthController(ILogger<AuthController> logger, IAuthenticationService authenticationService, ISendEmail sendEmail, IUserService userService)
+        public AuthUserController(ILogger<AuthUserController> logger, IAuthenticationUserService authenticationService, ISendEmail sendEmail, IUserService userService)
         {
             _logger = logger;
             _authenticationService = authenticationService;
@@ -44,10 +44,10 @@ namespace QuanLyNongNghiepAPI.Controllers
 
             try
             {
-                User? user = await _authenticationService.AuthenticateUserAsync(login);
+                User? user = await _authenticationService.AuthenticateAsync(login);
                 if (user != null)
                 {
-                    var tokenString = _authenticationService.GenerateTokenForUser(user);
+                    var tokenString = _authenticationService.GenerateToken(user);
 
                     return new OkObjectResult(new APIResponse<string>(tokenString, "Đăng nhập thành công", true));
                 }
@@ -78,7 +78,7 @@ namespace QuanLyNongNghiepAPI.Controllers
             {
                 try
                 {
-                    User? user = await _authenticationService.RegisterUserAsync(register);
+                    User? user = await _authenticationService.RegisterAsync(register);
                     if (user != null)
                     {
                         bool flog = await _sendEmail.SendEmailFromGmail(user.Email, "LEANWAY", $"Đăng ký tài khoản thành công, mật khẩu của bạn là: {user.Password}.");

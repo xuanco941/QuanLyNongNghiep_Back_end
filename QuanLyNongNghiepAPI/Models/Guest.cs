@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace QuanLyNongNghiepAPI.Models
 {
-    [Table("User")]
-    public class User
+    [Table("Guest")]
+    public class Guest
     {
         [Key]
-        public int UserID { get; set; }
+        public int GuestID { get; set; }
         [StringLength(50)]
         public string FullName { get; set; } = string.Empty;
         [Required]
@@ -24,8 +24,8 @@ namespace QuanLyNongNghiepAPI.Models
         [StringLength(300)]
         public string? Address { get; set; } = string.Empty;
         public string? Avatar { get; set; } = string.Empty;
-        public string Role { get; set; } = "User";
-        public List<Area>? Areas { get; set; } = null;
+        public string Role { get; set; } = "Guest";
+        public List<System>? Systems { get; set; }
 
     }
 }
