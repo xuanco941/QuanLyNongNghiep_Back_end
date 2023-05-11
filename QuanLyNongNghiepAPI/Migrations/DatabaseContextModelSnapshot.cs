@@ -183,8 +183,17 @@ namespace QuanLyNongNghiepAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Step")
+                        .HasColumnType("int");
+
                     b.Property<int>("SystemProcessID")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("TimeEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("TimeStart")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("ProcessID");
 
@@ -206,12 +215,6 @@ namespace QuanLyNongNghiepAPI.Migrations
 
                     b.Property<int>("SensorID")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("TimeEnd")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("TimeStart")
-                        .HasColumnType("datetime2");
 
                     b.Property<double>("ValueMax")
                         .HasColumnType("float");

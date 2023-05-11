@@ -12,7 +12,7 @@ using QuanLyNongNghiepAPI.Models;
 namespace QuanLyNongNghiepAPI.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230509095929_v1")]
+    [Migration("20230511014702_v1")]
     partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -185,8 +185,17 @@ namespace QuanLyNongNghiepAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Step")
+                        .HasColumnType("int");
+
                     b.Property<int>("SystemProcessID")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("TimeEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("TimeStart")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("ProcessID");
 
@@ -208,12 +217,6 @@ namespace QuanLyNongNghiepAPI.Migrations
 
                     b.Property<int>("SensorID")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("TimeEnd")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("TimeStart")
-                        .HasColumnType("datetime2");
 
                     b.Property<double>("ValueMax")
                         .HasColumnType("float");

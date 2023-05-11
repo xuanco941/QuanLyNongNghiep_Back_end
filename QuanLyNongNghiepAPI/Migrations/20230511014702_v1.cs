@@ -223,6 +223,9 @@ namespace QuanLyNongNghiepAPI.Migrations
                     ProcessID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())"),
+                    TimeStart = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TimeEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Step = table.Column<int>(type: "int", nullable: false),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NotificationType = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -248,8 +251,6 @@ namespace QuanLyNongNghiepAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ValueMin = table.Column<double>(type: "float", nullable: false),
                     ValueMax = table.Column<double>(type: "float", nullable: false),
-                    TimeStart = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TimeEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
                     SensorID = table.Column<int>(type: "int", nullable: false),
                     ProcessID = table.Column<int>(type: "int", nullable: false)
                 },
