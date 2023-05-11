@@ -10,8 +10,6 @@ namespace QuanLyNongNghiepAPI.Models
         public int ProcessConditionID { get; set; }
         public double ValueMin { get; set; }
         public double ValueMax { get; set; }
-        public DateTime TimeStart { get; set; }
-        public DateTime TimeEnd { get; set; }
         public int SensorID { get; set; }
         public Sensor Sensor { get; set; } = null!;
         public int ProcessID { get; set; }
