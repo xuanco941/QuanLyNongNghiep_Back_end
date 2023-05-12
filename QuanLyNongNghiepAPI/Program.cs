@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using QuanLyNongNghiepAPI.Services.User;
-using QuanLyNongNghiepAPI.Utils;
 using QuanLyNongNghiepAPI.Services.Sensor;
 using QuanLyNongNghiepAPI.Services.SensorData;
-using QuanLyNongNghiepAPI.Services.AuthenticationUser;
+using QuanLyNongNghiepAPI.Utils.Email;
+using QuanLyNongNghiepAPI.Utils.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +32,7 @@ builder.Services.AddAuthentication(opt => {
 
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]))
         };
         //options.SaveToken = true;
     });
@@ -72,10 +72,12 @@ builder.Services.AddSingleton<IWebHostEnvironment>(builder.Environment);
 
 //services
 
+//Utils
 builder.Services.AddTransient<ISendEmail, SendEmail>();
+builder.Services.AddTransient<IHttpContextMethod, HttpContextMethod>();
 
 
-builder.Services.AddTransient<IAuthenticationUserService, AuthenticationUserService>();
+//Service
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ISensorService, SensorService>();
 builder.Services.AddTransient<ISensorDataService, SensorDataService>();

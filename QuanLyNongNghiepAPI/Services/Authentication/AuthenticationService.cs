@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using QuanLyNongNghiepAPI.DataTransferObject.UserDTOs;
+using QuanLyNongNghiepAPI.DataTransferObject.ClientToServer.UserDTOs;
 using QuanLyNongNghiepAPI.Models;
 using QuanLyNongNghiepAPI.Services.User;
 using System.IdentityModel.Tokens.Jwt;
@@ -9,28 +9,17 @@ using System.Text;
 
 namespace QuanLyNongNghiepAPI.Services.AuthenticationUser
 {
-    public class AuthenticationUserService : IAuthenticationUserService
+    public class AuthenticationService : IAuthenticationService
     {
         private readonly DatabaseContext _dbContext;
         private readonly IConfiguration _config;
 
-        public AuthenticationUserService(DatabaseContext dbContext, IConfiguration config)
+        public AuthenticationService(DatabaseContext dbContext, IConfiguration config)
         {
             _dbContext = dbContext;
             _config = config;
         }
-        public async Task<Models.User?> AuthenticateAsync(LoginModel login)
-        {
-            try
-            {
-                Models.User? user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == login.Username && u.Password == login.Password);
-                return user;
-            }
-            catch
-            {
-                throw;
-            }
-        }
+
 
 
 
@@ -143,7 +132,7 @@ namespace QuanLyNongNghiepAPI.Services.AuthenticationUser
 
 
 
-        public string GenerateToken(Models.User user)
+        public string GenerateToken(string id, string email, string role)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_config["Jwt:SecretKey"]);

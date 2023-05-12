@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Net.Mail;
 
-namespace QuanLyNongNghiepAPI.Utils
+namespace QuanLyNongNghiepAPI.Utils.Email
 {
     public class SendEmail : ISendEmail
     {
@@ -12,7 +12,7 @@ namespace QuanLyNongNghiepAPI.Utils
             _config = config;
         }
 
-        public async Task <bool> SendEmailFromGmail(string toEmail, string subject, string body)
+        public async Task<bool> SendEmailFromGmail(string toEmail, string subject, string body)
         {
             string fromEmail = _config["Email:Address"];
             string password = _config["Email:Password"]; ; //app password , 2auth

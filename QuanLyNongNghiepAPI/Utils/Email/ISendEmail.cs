@@ -1,4 +1,4 @@
-﻿namespace QuanLyNongNghiepAPI.Utils
+﻿namespace QuanLyNongNghiepAPI.Utils.Email
 {
     public interface ISendEmail
     {

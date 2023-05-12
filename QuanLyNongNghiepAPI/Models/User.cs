@@ -9,7 +9,7 @@ namespace QuanLyNongNghiepAPI.Models
         [Key]
         public int UserID { get; set; }
         [StringLength(50)]
-        public string FullName { get; set; } = string.Empty;
+        public string? FullName { get; set; } = string.Empty;
         [Required]
         [StringLength(50)]
         public string Username { get; set; } = string.Empty;
@@ -25,7 +25,7 @@ namespace QuanLyNongNghiepAPI.Models
         public string? Address { get; set; } = string.Empty;
         public string? Avatar { get; set; } = string.Empty;
         public string Role { get; set; } = "User";
-        public List<Area>? Areas { get; set; } = null;
+        public List<UserArea>? UserAreas { get; set; }
 
     }
 }

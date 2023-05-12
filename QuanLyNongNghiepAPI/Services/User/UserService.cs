@@ -1,111 +1,65 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using QuanLyNongNghiepAPI.DataTransferObject.UserDTOs;
+using QuanLyNongNghiepAPI.DataTransferObject.ClientToServer;
+using QuanLyNongNghiepAPI.DataTransferObject.ClientToServer.UserDTOs;
 using QuanLyNongNghiepAPI.Models;
-using System.Security.Claims;
 
 namespace QuanLyNongNghiepAPI.Services.User
 {
     public class UserService : IUserService
     {
         private readonly DatabaseContext _dbContext;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(DatabaseContext dbContext, IHttpContextAccessor httpContextAccessor)
+        public UserService(DatabaseContext dbContext)
         {
             _dbContext = dbContext;
-            _httpContextAccessor = httpContextAccessor;
         }
 
-        public int? GetUserIDContext()
-        {
-            
-            var httpContext = _httpContextAccessor.HttpContext;
-            string? userId = null;
-            if (httpContext != null && httpContext.User != null)
-            {
-                userId = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            }
 
-            if (string.IsNullOrEmpty(userId) == false)
-            {
-                try
-                {
-                    return int.Parse(userId);
-                }
-                catch
-                {
-                    return null;
-                }
-            }
-            else
-            {
-                return null;
-            }
-        }
-        public async Task<Models.User?> GetInfoUserContext()
+        public async Task<Models.User?> Get(int id)
         {
             try
             {
-                int? userID = GetUserIDContext();
-                if (userID != null)
-                {
-                    Models.User? u = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserID == userID);
-                    return u;
-                }
-                else
-                {
-                    return null;
-                }
-
+                Models.User? u = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserID == id);
+                return u;
             }
             catch
             {
                 throw;
             }
         }
-        public async Task<bool> UpdateUserContext(UpdateUserModel updatedUser)
+        public async Task<Models.User?> Update(UpdateUserModel user, int idContext)
         {
             try
             {
-                int? userID = GetUserIDContext();
-                if (userID != null)
+                var existingUser = await _dbContext.Users.FindAsync(idContext);
+
+                if (existingUser != null)
                 {
-                    var existingUser = await _dbContext.Users.FindAsync(userID);
+                    existingUser.FullName = user.FullName;
+                    existingUser.Email = user.Email;
+                    existingUser.PhoneNumber = user.PhoneNumber;
+                    existingUser.Address = user.Address;
+                    existingUser.Avatar = user.Avatar;
 
-                    if (existingUser != null)
-                    {
-                        existingUser.FullName = updatedUser.FullName;
-                        existingUser.Username = updatedUser.Username;
-                        existingUser.Email = updatedUser.Email;
-                        existingUser.PhoneNumber = updatedUser.PhoneNumber;
-                        existingUser.Address = updatedUser.Address;
-                        existingUser.Avatar = updatedUser.Avatar;
-
-                        await _dbContext.SaveChangesAsync();
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    await _dbContext.SaveChangesAsync();
+                    return existingUser;
                 }
                 else
                 {
-                    return false;
+                    return existingUser;
                 }
             }
             catch
             {
-                return false;
+                return null;
             }
         }
-        public async Task<bool> DeleteAUser(int userId)
+        public async Task<bool> Delete(int idContext)
         {
             try
             {
-                var user = await _dbContext.Users
-                .FirstOrDefaultAsync(c => c.UserID == userId);
-                if (user != null )
+                var user = await _dbContext.Users.FirstOrDefaultAsync(c => c.UserID == idContext);
+                if (user != null)
                 {
                     _dbContext.Users.Remove(user);
                     return await _dbContext.SaveChangesAsync() > 0;
@@ -118,6 +72,20 @@ namespace QuanLyNongNghiepAPI.Services.User
             catch
             {
                 return false;
+            }
+        }
+
+
+        public async Task<Models.User?> Authenticate(LoginModel login)
+        {
+            try
+            {
+                Models.User? user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == login.Username && u.Password == login.Password);
+                return user;
+            }
+            catch
+            {
+                throw;
             }
         }
 

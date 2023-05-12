@@ -1,4 +1,4 @@
-﻿namespace QuanLyNongNghiepAPI.DataTransferObject.UserDTOs
+﻿namespace QuanLyNongNghiepAPI.DataTransferObject.ClientToServer
 {
     public class LoginModel
     {

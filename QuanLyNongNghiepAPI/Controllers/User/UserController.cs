@@ -1,22 +1,26 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuanLyNongNghiepAPI.DataTransferObject;
-using QuanLyNongNghiepAPI.DataTransferObject.UserDTOs;
+using QuanLyNongNghiepAPI.DataTransferObject.ClientToServer.UserDTOs;
 using QuanLyNongNghiepAPI.Services.User;
+using QuanLyNongNghiepAPI.Utils.Context;
 
-namespace QuanLyNongNghiepAPI.Controllers
+namespace QuanLyNongNghiepAPI.Controllers.User
 {
     [ApiController]
-    [Route("API/[controller]")]
+    [Route("[controller]")]
     public class UserController
     {
         private readonly IUserService _userService;
+        private readonly IHttpContextMethod _httpContextMethod;
         private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public UserController(IUserService userService, IWebHostEnvironment hostEnvironment)
+        public UserController(IUserService userService, IWebHostEnvironment hostEnvironment, IHttpContextMethod httpContextMethod)
         {
             _userService = userService;
             _hostingEnvironment = hostEnvironment;
+            _httpContextMethod = httpContextMethod;
+
         }
 
         [Authorize]
@@ -25,20 +29,22 @@ namespace QuanLyNongNghiepAPI.Controllers
         {
             try
             {
-                Models.User? user = await _userService.GetInfoUserContext();
+                int? idContext = _httpContextMethod.GetIDContext();
+
+                Models.User? user = await _userService.Get();
 
 
                 string imageDataUrl = string.Empty;
 
                 if (user != null && string.IsNullOrEmpty(user.Avatar) == false)
                 {
-                    var imageBytes = System.IO.File.ReadAllBytes(user.Avatar);
+                    var imageBytes = File.ReadAllBytes(user.Avatar);
                     var base64String = Convert.ToBase64String(imageBytes);
                     imageDataUrl = $"data:image/jpeg;base64,{base64String}";
                 }
 
 
-                var objectUser = user != null ? new { FullName = user.FullName, Username = user.Username, Email = user.Email, PhoneNumber = user.PhoneNumber, Address = user.Address, Avatar = imageDataUrl } : null;
+                var objectUser = user != null ? new { user.FullName, user.Username, user.Email, user.PhoneNumber, user.Address, Avatar = imageDataUrl } : null;
                 return new OkObjectResult(new APIResponse<object>(objectUser, "success", true));
 
             }
@@ -61,7 +67,7 @@ namespace QuanLyNongNghiepAPI.Controllers
                     var bytes = Convert.FromBase64String(update.Avatar);
                     var fileName = Guid.NewGuid().ToString() + ".jpg";
                     var filePath = Path.Combine(_hostingEnvironment.WebRootPath, $"uploads", fileName);
-                    System.IO.File.WriteAllBytes(filePath, bytes);
+                    File.WriteAllBytes(filePath, bytes);
 
                     update.Avatar = filePath;
                 }

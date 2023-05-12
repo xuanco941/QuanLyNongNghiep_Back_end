@@ -1,13 +1,13 @@
-﻿using QuanLyNongNghiepAPI.DataTransferObject;
-using QuanLyNongNghiepAPI.DataTransferObject.UserDTOs;
+﻿using QuanLyNongNghiepAPI.DataTransferObject.ClientToServer;
+using QuanLyNongNghiepAPI.DataTransferObject.ClientToServer.UserDTOs;
 
 namespace QuanLyNongNghiepAPI.Services.User
 {
     public interface IUserService
     {
-        public Task<Models.User?> GetInfoUserContext();
-        public Task<bool> UpdateUserContext(UpdateUserModel updatedUser);
-        public Task<bool> DeleteAUser(int userId);
-        public int? GetUserIDContext();
+        public Task<Models.User?> Get(int id);
+        public Task<Models.User?> Update(UpdateUserModel user, int idContext);
+        public Task<bool> Delete(int idContext);
+        public Task<Models.User?> Authenticate(LoginModel login);
     }
 }

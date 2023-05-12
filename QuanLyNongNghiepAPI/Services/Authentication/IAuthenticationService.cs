@@ -1,8 +1,9 @@
-﻿using QuanLyNongNghiepAPI.DataTransferObject.UserDTOs;
+﻿using QuanLyNongNghiepAPI.DataTransferObject.ClientToServer;
+using QuanLyNongNghiepAPI.DataTransferObject.ClientToServer.UserDTOs;
 
-namespace QuanLyNongNghiepAPI.Services.AuthenticationUser
+namespace QuanLyNongNghiepAPI.Services.Authentication
 {
-    public interface IAuthenticationUserService
+    public interface IAuthenticationService
     {
         public Task<Models.User?> AuthenticateAsync(LoginModel login);
         public Task<Models.User?> RegisterAsync(RegisterModel register);

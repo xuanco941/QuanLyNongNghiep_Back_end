@@ -17,7 +17,7 @@ namespace QuanLyNongNghiepAPI.Models
         public DbSet<System> Systems { get; set; } = null!;
         public DbSet<SystemProcess> SystemProcesses { get; set; } = null!;
         public DbSet<User> Users { get; set; } = null!;
-
+        public DbSet<UserArea> UserAreas { get; set; }
 
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options, IConfiguration configuration)
@@ -98,6 +98,21 @@ namespace QuanLyNongNghiepAPI.Models
                 entity.HasIndex(e => e.Username).IsUnique();
 
             });
+
+
+            //userArea
+            modelBuilder.Entity<UserArea>()
+                 .HasKey(ua => new { ua.UserID, ua.AreaID });
+
+            modelBuilder.Entity<UserArea>()
+                .HasOne(ua => ua.User)
+                .WithMany(u => u.UserAreas)
+                .HasForeignKey(ua => ua.UserID);
+
+            modelBuilder.Entity<UserArea>()
+                .HasOne(ua => ua.Area)
+                .WithMany(a => a.UserAreas)
+                .HasForeignKey(ua => ua.AreaID);
 
 
 

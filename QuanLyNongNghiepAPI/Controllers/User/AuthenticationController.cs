@@ -1,33 +1,27 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Win32;
 using QuanLyNongNghiepAPI.DataTransferObject;
-using QuanLyNongNghiepAPI.DataTransferObject.UserDTOs;
-using QuanLyNongNghiepAPI.Models;
-using QuanLyNongNghiepAPI.Services.AuthenticationUser;
+using QuanLyNongNghiepAPI.DataTransferObject.ClientToServer;
+using QuanLyNongNghiepAPI.DataTransferObject.ClientToServer.UserDTOs;
 using QuanLyNongNghiepAPI.Services.User;
-using QuanLyNongNghiepAPI.Utils;
+using QuanLyNongNghiepAPI.Utils.Email;
 using System.Text.RegularExpressions;
 
-namespace QuanLyNongNghiepAPI.Controllers
+namespace QuanLyNongNghiepAPI.Controllers.User
 {
     [ApiController]
-    [Route("API/[controller]")]
-    public class AuthUserController
+    [Route("User/[controller]")]
+    public class AuthenticationController
     {
 
-        private readonly ILogger<AuthUserController> _logger;
-        private readonly IAuthenticationUserService _authenticationService;
+        private readonly ILogger<AuthenticationController> _logger;
         private readonly ISendEmail _sendEmail;
         private readonly IUserService _userService;
 
 
-
-
-        public AuthUserController(ILogger<AuthUserController> logger, IAuthenticationUserService authenticationService, ISendEmail sendEmail, IUserService userService)
+        public AuthenticationController(ILogger<AuthenticationController> logger, ISendEmail sendEmail, IUserService userService)
         {
             _logger = logger;
-            _authenticationService = authenticationService;
             _sendEmail = sendEmail;
             _userService = userService;
         }
@@ -37,14 +31,14 @@ namespace QuanLyNongNghiepAPI.Controllers
         public async Task<IActionResult> Login([FromBody] LoginModel login)
         {
 
-            if(string.IsNullOrEmpty(login.Username) || string.IsNullOrEmpty(login.Password))
+            if (string.IsNullOrEmpty(login.Username) || string.IsNullOrEmpty(login.Password))
             {
                 return new BadRequestObjectResult(new APIResponse<string>(null, "Tài khoản hoặc mật khẩu không được để trống.", false));
             }
 
             try
             {
-                User? user = await _authenticationService.AuthenticateAsync(login);
+                Models.User? user = await _userService.a(login);
                 if (user != null)
                 {
                     var tokenString = _authenticationService.GenerateToken(user);
@@ -78,7 +72,7 @@ namespace QuanLyNongNghiepAPI.Controllers
             {
                 try
                 {
-                    User? user = await _authenticationService.RegisterAsync(register);
+                    Models.User? user = await _authenticationService.RegisterAsync(register);
                     if (user != null)
                     {
                         bool flog = await _sendEmail.SendEmailFromGmail(user.Email, "LEANWAY", $"Đăng ký tài khoản thành công, mật khẩu của bạn là: {user.Password}.");
@@ -121,7 +115,7 @@ namespace QuanLyNongNghiepAPI.Controllers
 
             try
             {
-                User? user = await _authenticationService.ForgotPasswordAsync(forgotPassword);
+                Models.User? user = await _authenticationService.ForgotPasswordAsync(forgotPassword);
                 if (user != null)
                 {
                     bool flog = await _sendEmail.SendEmailFromGmail(user.Email, "LEANWAY", $"Đặt lại mật khẩu thành công, mật khẩu mới của bạn là: {user.Password}.");

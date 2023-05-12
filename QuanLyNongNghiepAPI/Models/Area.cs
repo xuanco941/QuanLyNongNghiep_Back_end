@@ -13,6 +13,8 @@ namespace QuanLyNongNghiepAPI.Models
         public string? Symbol { get; set; } = string.Empty;
         public DateTime UpdateAt { get; set; }
 
+        public List<UserArea>? UserAreas { get; set; }
+
 
     }
 }
