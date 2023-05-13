@@ -8,6 +8,7 @@ using QuanLyNongNghiepAPI.Services.Sensor;
 using QuanLyNongNghiepAPI.Services.SensorData;
 using QuanLyNongNghiepAPI.Utils.Email;
 using QuanLyNongNghiepAPI.Utils.Context;
+using QuanLyNongNghiepAPI.Services.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,6 +82,8 @@ builder.Services.AddTransient<IHttpContextMethod, HttpContextMethod>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ISensorService, SensorService>();
 builder.Services.AddTransient<ISensorDataService, SensorDataService>();
+builder.Services.AddTransient<IAuthService, AuthService>();
+
 
 
 

@@ -2,6 +2,6 @@
 {
     public interface IHttpContextMethod
     {
-        public int? GetIDContext();
+        public int GetIDContext();
     }
 }

@@ -5,14 +5,12 @@ namespace QuanLyNongNghiepAPI.Utils.Context
     public class HttpContextMethod : IHttpContextMethod
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IConfiguration _configuration;
 
-        public HttpContextMethod(IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
+        public HttpContextMethod(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
-            _configuration = configuration;
         }
-        public int? GetIDContext()
+        public int GetIDContext()
         {
 
             var httpContext = _httpContextAccessor.HttpContext;
@@ -30,12 +28,12 @@ namespace QuanLyNongNghiepAPI.Utils.Context
                 }
                 catch
                 {
-                    return null;
+                    return 0;
                 }
             }
             else
             {
-                return null;
+                return 0;
             }
         }
     }

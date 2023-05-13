@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using QuanLyNongNghiepAPI.DataTransferObject.ClientToServer;
 using QuanLyNongNghiepAPI.DataTransferObject.ClientToServer.UserDTOs;
 using QuanLyNongNghiepAPI.Models;
 
@@ -27,7 +26,7 @@ namespace QuanLyNongNghiepAPI.Services.User
                 throw;
             }
         }
-        public async Task<Models.User?> Update(UpdateUserModel user, int idContext)
+        public async Task<bool> Update(UpdateUserModel user, int idContext)
         {
             try
             {
@@ -40,18 +39,14 @@ namespace QuanLyNongNghiepAPI.Services.User
                     existingUser.PhoneNumber = user.PhoneNumber;
                     existingUser.Address = user.Address;
                     existingUser.Avatar = user.Avatar;
+                }
 
-                    await _dbContext.SaveChangesAsync();
-                    return existingUser;
-                }
-                else
-                {
-                    return existingUser;
-                }
+                return await _dbContext.SaveChangesAsync() > 0;
+
             }
             catch
             {
-                return null;
+                throw;
             }
         }
         public async Task<bool> Delete(int idContext)
@@ -62,26 +57,83 @@ namespace QuanLyNongNghiepAPI.Services.User
                 if (user != null)
                 {
                     _dbContext.Users.Remove(user);
-                    return await _dbContext.SaveChangesAsync() > 0;
                 }
-                else
-                {
-                    return false;
-                }
+                return await _dbContext.SaveChangesAsync() > 0;
+
             }
             catch
             {
-                return false;
+                throw;
             }
         }
 
+        public async Task<Models.User?> ForgotPassword(ForgotPasswordModel forgotPassword)
+        {
+            Random rand = new Random();
+            string password = string.Empty;
+            for (int i = 0; i < 4; i++)
+            {
+                password = password + rand.Next(0, 10);
+            }
 
-        public async Task<Models.User?> Authenticate(LoginModel login)
+            try
+            {
+                Models.User? user = _dbContext.Users.FirstOrDefault(a => a.Username == forgotPassword.Username);
+                if (user != null)
+                {
+                    user.Password = password;
+                }
+                int num = await _dbContext.SaveChangesAsync();
+                if (num > 0)
+                {
+                    return user;
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<bool> ChangePassword(int userId, ChangePasswordModel changePassword)
         {
             try
             {
-                Models.User? user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == login.Username && u.Password == login.Password);
-                return user;
+                Models.User? user = await _dbContext.Users.FirstOrDefaultAsync(a => a.UserID == userId);
+                if (user != null)
+                {
+                    user.Password = changePassword.NewPassword;
+                }
+                return await _dbContext.SaveChangesAsync() > 0;
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<bool> Add(AddUserModel addUserModel)
+        {
+            Models.User user = new Models.User()
+            {
+                FullName = addUserModel.FullName,
+                Username = addUserModel.Username,
+                Address = addUserModel.Address,
+                Email = addUserModel.Email,
+                PhoneNumber = addUserModel.PhoneNumber,
+                Password = addUserModel.Password
+            };
+
+            try
+            {
+                await _dbContext.AddAsync(user);
+                return await _dbContext.SaveChangesAsync() > 0;
             }
             catch
             {

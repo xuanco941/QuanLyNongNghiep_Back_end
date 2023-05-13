@@ -24,11 +24,9 @@
 
   <ItemGroup>
     <Folder Include="Controllers\Admin\" />
-    <Folder Include="Controllers\Guest\" />
+    <Folder Include="DataTransferObject\Converter\" />
     <Folder Include="Services\Admin\" />
     <Folder Include="Services\Guest\" />
-    <Folder Include="Services\AuthenticationAdmin\" />
-    <Folder Include="Services\AuthenticationGuest\" />
     <Folder Include="Services\SystemProcess\" />
     <Folder Include="Services\ResponseGateway\" />
     <Folder Include="Services\ProcessCondition\" />
