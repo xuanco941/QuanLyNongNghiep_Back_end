@@ -110,8 +110,8 @@ namespace QuanLyNongNghiepAPI.Controllers.User
             }
         }
 
-        [Authorize]
         [HttpPost("ChangePassword")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordModel changePassword)
         {
 
