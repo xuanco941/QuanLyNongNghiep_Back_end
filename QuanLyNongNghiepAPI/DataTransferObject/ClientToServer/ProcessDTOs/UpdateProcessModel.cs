@@ -1,12 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
-namespace QuanLyNongNghiepAPI.Models
+﻿namespace QuanLyNongNghiepAPI.DataTransferObject.ClientToServer.ProcessDTOs
 {
-    [Table("Process")]
-    public class Process
+    public class UpdateProcessModel
     {
-        [Key]
         public int ProcessID { get; set; }
         public DateTime TimeStart { get; set; }
         public DateTime TimeEnd { get; set; }
@@ -17,6 +12,5 @@ namespace QuanLyNongNghiepAPI.Models
         public bool IsDone { get; set; } = false;
         public DateTime CreateAt { get; set; }
         public int SystemProcessID { get; set; }
-        public SystemProcess SystemProcess { get; set; } = null!;
     }
 }
