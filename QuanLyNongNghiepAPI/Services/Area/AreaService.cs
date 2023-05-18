@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using QuanLyNongNghiepAPI.DataTransferObject.ClientToServer.AreaDTOs;
+using QuanLyNongNghiepAPI.DataTransferObject.ServerToClient;
 using QuanLyNongNghiepAPI.Models;
 
 namespace QuanLyNongNghiepAPI.Services.Area
@@ -55,14 +56,22 @@ namespace QuanLyNongNghiepAPI.Services.Area
 
         }
 
-        public async Task<bool> Delete(GetOrDeleteAreaModel getOrDeleteAreaModel)
+        public async Task<bool> Delete(DeleteAreaModel deleteAreaModel)
         {
-            var area = await _dbContext.Areas.FindAsync(getOrDeleteAreaModel.AreaID);
-            if (area != null)
+            try
             {
-                _dbContext.Areas.Remove(area);
+                var area = await _dbContext.Areas.FindAsync(deleteAreaModel.AreaID);
+                if (area != null)
+                {
+                    _dbContext.Areas.Remove(area);
+                }
+                return await _dbContext.SaveChangesAsync() > 0;
             }
-            return await _dbContext.SaveChangesAsync() > 0;
+            catch
+            {
+                throw;
+            }
+
 
         }
 
@@ -95,6 +104,30 @@ namespace QuanLyNongNghiepAPI.Services.Area
             {
                 throw;
             }
+        }
+
+        public async Task<PaginatedListModel<Models.Area>> GetAreas(int pageNumber, int pageSize)
+        {
+            try
+            {
+                // Tính toán điểm bắt đầu và kết thúc
+                int startRow = (pageNumber - 1) * pageSize;
+
+                // Lấy tổng số Area
+                int totalRows = await _dbContext.Areas.CountAsync();
+
+                // Truy vấn Area theo khoảng cần phân trang
+                var areas = await _dbContext.Areas.Skip(startRow).Take(pageSize).ToListAsync();
+
+                // Trả về kết quả phân trang
+                return new PaginatedListModel<Models.Area>(areas, pageNumber, pageSize, totalRows);
+            }
+            catch
+            {
+                throw;
+            }
+
+
         }
 
     }

@@ -1,6 +1,6 @@
 ﻿namespace QuanLyNongNghiepAPI.DataTransferObject.ClientToServer.SensorDTOs
 {
-    public class GetOrDeleteSensorModel
+    public class DeleteSensorModel
     {
         public int SensorID { get; set; }
     }

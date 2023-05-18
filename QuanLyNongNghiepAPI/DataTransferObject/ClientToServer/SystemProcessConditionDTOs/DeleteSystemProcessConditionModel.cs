@@ -2,7 +2,7 @@
 
 namespace QuanLyNongNghiepAPI.DataTransferObject.ClientToServer.ProcessConditionDTOs
 {
-    public class GetOrDeleteSystemProcessConditionModel
+    public class DeleteSystemProcessConditionModel
     {
         public int SystemProcessConditionID { get; set; }
 

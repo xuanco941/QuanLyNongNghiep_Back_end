@@ -2,7 +2,7 @@
 
 namespace QuanLyNongNghiepAPI.DataTransferObject.ClientToServer.ProcessDTOs
 {
-    public class GetOrDeleteSystemProcessNoteModel
+    public class DeleteSystemProcessNoteModel
     {
         public int SystemProcessNoteID { get; set; }
 

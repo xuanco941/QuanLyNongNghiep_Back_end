@@ -38,7 +38,7 @@ namespace QuanLyNongNghiepAPI.Services.Auth
             return tokenHandler.WriteToken(token);
         }
 
-        public async Task<Models.User?> AuthenticateUser(LoginModel login)
+        public async Task<Models.User?> AuthenticateUser(LoginRequestModel login)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace QuanLyNongNghiepAPI.Services.Auth
             }
         }
 
-        public async Task<Models.Guest?> AuthenticateGuest(LoginModel login)
+        public async Task<Models.Guest?> AuthenticateGuest(LoginRequestModel login)
         {
             try
             {
@@ -63,7 +63,7 @@ namespace QuanLyNongNghiepAPI.Services.Auth
                 throw;
             }
         }
-        public async Task<Models.Admin?> AuthenticateAdmin(LoginModel login)
+        public async Task<Models.Admin?> AuthenticateAdmin(LoginRequestModel login)
         {
             try
             {

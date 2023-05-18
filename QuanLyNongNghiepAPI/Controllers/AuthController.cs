@@ -23,7 +23,7 @@ namespace QuanLyNongNghiepAPI.Controllers
 
         [AllowAnonymous]
         [HttpPost("User")]
-        public async Task<IActionResult> User([FromBody] LoginModel login)
+        public async Task<IActionResult> User([FromBody] LoginRequestModel login)
         {
             //kiểm tra tài khoản mật khẩu gửi xuống có rỗng hoặc null không
             if (string.IsNullOrEmpty(login.Username) || string.IsNullOrEmpty(login.Password))
@@ -61,7 +61,7 @@ namespace QuanLyNongNghiepAPI.Controllers
 
         [AllowAnonymous]
         [HttpPost("Guest")]
-        public async Task<IActionResult> Guest([FromBody] LoginModel login)
+        public async Task<IActionResult> Guest([FromBody] LoginRequestModel login)
         {
             //kiểm tra tài khoản mật khẩu gửi xuống có rỗng hoặc null không
             if (string.IsNullOrEmpty(login.Username) || string.IsNullOrEmpty(login.Password))
@@ -101,7 +101,7 @@ namespace QuanLyNongNghiepAPI.Controllers
 
         [AllowAnonymous]
         [HttpPost("Admin")]
-        public async Task<IActionResult> Admin([FromBody] LoginModel login)
+        public async Task<IActionResult> Admin([FromBody] LoginRequestModel login)
         {
             //kiểm tra tài khoản mật khẩu gửi xuống có rỗng hoặc null không
             if (string.IsNullOrEmpty(login.Username) || string.IsNullOrEmpty(login.Password))

@@ -1,6 +1,6 @@
 ﻿namespace QuanLyNongNghiepAPI.DataTransferObject.ClientToServer.SystemProcessDTOs
 {
-    public class GetOrDeleteSystemProcessModel
+    public class DeleteSystemProcessModel
     {
         public int SystemProcessID { get; set; }
     }

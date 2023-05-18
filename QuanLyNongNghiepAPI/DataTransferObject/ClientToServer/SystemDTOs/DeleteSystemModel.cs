@@ -1,6 +1,6 @@
 ﻿namespace QuanLyNongNghiepAPI.DataTransferObject.ClientToServer.SystemDTOs
 {
-    public class GetOrDeleteSystemModel
+    public class DeleteSystemModel
     {
         public int SystemID { get; set; }
 
