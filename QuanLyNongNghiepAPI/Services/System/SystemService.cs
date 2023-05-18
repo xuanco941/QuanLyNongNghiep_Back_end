@@ -133,5 +133,30 @@ namespace QuanLyNongNghiepAPI.Services.System
 
         }
 
+
+        public async Task<PaginatedListModel<Models.System>> GetSystemsByAreaId(int pageNumber, int pageSize, int areaId)
+        {
+            try
+            {
+                // Tính toán điểm bắt đầu và kết thúc
+                int startRow = (pageNumber - 1) * pageSize;
+
+                // Lấy tổng số Area
+                int totalRows = await _dbContext.Systems.Where(s => s.AreaID == areaId).CountAsync();
+
+                // Truy vấn Area theo khoảng cần phân trang
+                var areas = await _dbContext.Systems.Where(s => s.AreaID == areaId).Skip(startRow).Take(pageSize).ToListAsync();
+
+                // Trả về kết quả phân trang
+                return new PaginatedListModel<Models.System>(areas, pageNumber, pageSize, totalRows);
+            }
+            catch
+            {
+                throw;
+            }
+
+
+        }
+
     }
 }

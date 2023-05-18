@@ -87,6 +87,8 @@ builder.Services.AddTransient<ISensorDataService, SensorDataService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IAreaService, AreaService>();
 builder.Services.AddTransient<ISystemService, SystemService>();
+builder.Services.AddTransient<ISensorService, SensorService>();
+
 
 
 

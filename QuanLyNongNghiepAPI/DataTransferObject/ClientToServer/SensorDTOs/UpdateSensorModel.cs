@@ -8,6 +8,5 @@
         public string? Name { get; set; } = string.Empty;
         public string? Symbol { get; set; } = string.Empty;
         public string? Unit { get; set; } = string.Empty;
-        public int SystemID { get; set; }
     }
 }

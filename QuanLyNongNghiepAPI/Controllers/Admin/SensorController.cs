@@ -1,33 +1,33 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using QuanLyNongNghiepAPI.DataTransferObject.ServerToClient;
 using QuanLyNongNghiepAPI.DataTransferObject;
-using QuanLyNongNghiepAPI.Services.System;
-using QuanLyNongNghiepAPI.DataTransferObject.ClientToServer.SystemDTOs;
+using QuanLyNongNghiepAPI.DataTransferObject.ClientToServer.SensorDTOs;
+using QuanLyNongNghiepAPI.DataTransferObject.ServerToClient;
+using QuanLyNongNghiepAPI.Services.Sensor;
 
 namespace QuanLyNongNghiepAPI.Controllers.Admin
 {
     [ApiController]
     [Route("API/Admin/[controller]")]
-    public class SystemController
+    public class SensorController
     {
-        private readonly ISystemService _systemService;
+        private readonly ISensorService _sensorService;
 
 
-        public SystemController(ISystemService systemService)
+        public SensorController(ISensorService sensorService)
         {
-            _systemService = systemService;
+            _sensorService = sensorService;
 
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("GetSystem/{systemId}")]
-        public async Task<IActionResult> GetSystem(int systemId)
+        [HttpGet("GetSensor/{sensorId}")]
+        public async Task<IActionResult> GetSensor(int sensorId)
         {
             try
             {
-                var result = await _systemService.Get(systemId);
-                return result != null ? new OkObjectResult(new APIResponse<Models.System?>(result, "success", true)) : new NotFoundResult();
+                var result = await _sensorService.Get(sensorId);
+                return result != null ? new OkObjectResult(new APIResponse<Models.Sensor?>(result, "success", true)) : new NotFoundResult();
             }
             catch
             {
@@ -37,28 +37,13 @@ namespace QuanLyNongNghiepAPI.Controllers.Admin
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("GetSystems")]
-        public async Task<IActionResult> GetSystems(int pageNumber, int pageSize)
+        [HttpGet("GetSensorsBySystemId/{systemID}")]
+        public async Task<IActionResult> GetSensorsBySystemId(int systemID, int pageNumber, int pageSize)
         {
             try
             {
-                var result = await _systemService.GetSystems(pageNumber, pageSize);
-                return new OkObjectResult(new APIResponse<PaginatedListModel<Models.System>>(result, "success", true));
-            }
-            catch
-            {
-                return new BadRequestResult();
-            }
-
-        }
-        [Authorize(Roles = "Admin")]
-        [HttpGet("GetSystemsByAreaId/{areaId}")]
-        public async Task<IActionResult> GetSystemsByAreaId(int pageNumber, int pageSize, int areaId)
-        {
-            try
-            {
-                var result = await _systemService.GetSystemsByAreaId(pageNumber, pageSize, areaId);
-                return new OkObjectResult(new APIResponse<PaginatedListModel<Models.System>>(result, "success", true));
+                var result = await _sensorService.GetSensorsBySystemId(pageNumber, pageSize, systemID);
+                return new OkObjectResult(new APIResponse<PaginatedListModel<Models.Sensor>>(result, "success", true));
             }
             catch
             {
@@ -69,11 +54,11 @@ namespace QuanLyNongNghiepAPI.Controllers.Admin
 
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("AddSystem")]
-        public async Task<IActionResult> AddSystem([FromBody] AddSystemModel addSystemModel)
+        [HttpPost("AddSensor")]
+        public async Task<IActionResult> AddSensor([FromBody] AddSensorModel addSensorModel)
         {
 
-            if (string.IsNullOrEmpty(addSystemModel.Name))
+            if (string.IsNullOrEmpty(addSensorModel.Name))
             {
                 return new BadRequestObjectResult(new APIResponse<string>(null, "Tên không được để trống.", false));
             }
@@ -81,7 +66,7 @@ namespace QuanLyNongNghiepAPI.Controllers.Admin
 
             try
             {
-                bool isAdded = await _systemService.Add(addSystemModel);
+                bool isAdded = await _sensorService.Add(addSensorModel);
                 if (isAdded == true)
                 {
                     return new OkObjectResult(new APIResponse<bool>(isAdded, "Thêm thành công.", true));
@@ -101,12 +86,12 @@ namespace QuanLyNongNghiepAPI.Controllers.Admin
 
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("UpdateSystem")]
-        public async Task<IActionResult> UpdateSystem([FromBody] UpdateSystemModel updateSystemModel)
+        [HttpPost("UpdateSensor")]
+        public async Task<IActionResult> UpdateSensor([FromBody] UpdateSensorModel updateSensorModel)
         {
             try
             {
-                bool isUpdate = await _systemService.Update(updateSystemModel);
+                bool isUpdate = await _sensorService.Update(updateSensorModel);
                 if (isUpdate == true)
                 {
                     return new OkObjectResult(new APIResponse<bool>(isUpdate, "Cập nhật thành công.", true));
@@ -117,7 +102,7 @@ namespace QuanLyNongNghiepAPI.Controllers.Admin
                 }
 
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return new BadRequestObjectResult(new APIResponse<bool>(false, e.Message, false));
             }
@@ -128,12 +113,12 @@ namespace QuanLyNongNghiepAPI.Controllers.Admin
 
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("DeleteSystem")]
-        public async Task<IActionResult> DeleteSystem([FromBody] DeleteSystemModel deleteSystemModel)
+        [HttpPost("DeleteSensor")]
+        public async Task<IActionResult> DeleteSensor([FromBody] DeleteSensorModel deleteSensorModel)
         {
             try
             {
-                bool isDelete = await _systemService.Delete(deleteSystemModel);
+                bool isDelete = await _sensorService.Delete(deleteSensorModel);
                 if (isDelete == true)
                 {
                     return new OkObjectResult(new APIResponse<bool>(isDelete, "Xóa thành công.", true));
@@ -144,7 +129,7 @@ namespace QuanLyNongNghiepAPI.Controllers.Admin
                 }
 
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return new OkObjectResult(new APIResponse<bool>(false, e.Message, false));
             }
