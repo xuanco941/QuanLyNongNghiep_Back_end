@@ -192,8 +192,12 @@ namespace QuanLyNongNghiepAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TimeStart = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TimeEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NotificationType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDone = table.Column<bool>(type: "bit", nullable: false),
-                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     SystemID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -235,26 +239,30 @@ namespace QuanLyNongNghiepAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Process",
+                name: "SystemProcessCondition",
                 columns: table => new
                 {
-                    ProcessID = table.Column<int>(type: "int", nullable: false)
+                    SystemProcessConditionID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())"),
-                    TimeStart = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TimeEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Step = table.Column<int>(type: "int", nullable: false),
-                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NotificationType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsDone = table.Column<bool>(type: "bit", nullable: false),
+                    ValueMin = table.Column<double>(type: "float", nullable: true),
+                    ValueMax = table.Column<double>(type: "float", nullable: true),
+                    ValueAvg = table.Column<double>(type: "float", nullable: true),
+                    Step = table.Column<int>(type: "int", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SensorID = table.Column<int>(type: "int", nullable: false),
                     SystemProcessID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Process", x => x.ProcessID);
+                    table.PrimaryKey("PK_SystemProcessCondition", x => x.SystemProcessConditionID);
                     table.ForeignKey(
-                        name: "FK_Process_SystemProcess_SystemProcessID",
+                        name: "FK_SystemProcessCondition_Sensor_SensorID",
+                        column: x => x.SensorID,
+                        principalTable: "Sensor",
+                        principalColumn: "SensorID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SystemProcessCondition_SystemProcess_SystemProcessID",
                         column: x => x.SystemProcessID,
                         principalTable: "SystemProcess",
                         principalColumn: "SystemProcessID",
@@ -262,31 +270,30 @@ namespace QuanLyNongNghiepAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProcessCondition",
+                name: "SystemProcessNote",
                 columns: table => new
                 {
-                    ProcessConditionID = table.Column<int>(type: "int", nullable: false)
+                    SystemProcessNoteID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ValueMin = table.Column<double>(type: "float", nullable: false),
-                    ValueMax = table.Column<double>(type: "float", nullable: false),
-                    SensorID = table.Column<int>(type: "int", nullable: false),
-                    ProcessID = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TimeStart = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TimeEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NotificationType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDone = table.Column<bool>(type: "bit", nullable: false),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())"),
+                    SystemProcessID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProcessCondition", x => x.ProcessConditionID);
+                    table.PrimaryKey("PK_SystemProcessNote", x => x.SystemProcessNoteID);
                     table.ForeignKey(
-                        name: "FK_ProcessCondition_Process_ProcessID",
-                        column: x => x.ProcessID,
-                        principalTable: "Process",
-                        principalColumn: "ProcessID",
+                        name: "FK_SystemProcessNote_SystemProcess_SystemProcessID",
+                        column: x => x.SystemProcessID,
+                        principalTable: "SystemProcess",
+                        principalColumn: "SystemProcessID",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProcessCondition_Sensor_SensorID",
-                        column: x => x.SensorID,
-                        principalTable: "Sensor",
-                        principalColumn: "SensorID",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -305,21 +312,6 @@ namespace QuanLyNongNghiepAPI.Migrations
                 table: "Guest",
                 column: "Username",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Process_SystemProcessID",
-                table: "Process",
-                column: "SystemProcessID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProcessCondition_ProcessID",
-                table: "ProcessCondition",
-                column: "ProcessID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProcessCondition_SensorID",
-                table: "ProcessCondition",
-                column: "SensorID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ResponseGateway_SystemID",
@@ -358,6 +350,21 @@ namespace QuanLyNongNghiepAPI.Migrations
                 column: "SystemID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SystemProcessCondition_SensorID",
+                table: "SystemProcessCondition",
+                column: "SensorID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SystemProcessCondition_SystemProcessID",
+                table: "SystemProcessCondition",
+                column: "SystemProcessID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SystemProcessNote_SystemProcessID",
+                table: "SystemProcessNote",
+                column: "SystemProcessID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_User_Username",
                 table: "User",
                 column: "Username",
@@ -378,16 +385,16 @@ namespace QuanLyNongNghiepAPI.Migrations
                 name: "Guest");
 
             migrationBuilder.DropTable(
-                name: "ProcessCondition");
-
-            migrationBuilder.DropTable(
                 name: "SensorData");
 
             migrationBuilder.DropTable(
-                name: "UserArea");
+                name: "SystemProcessCondition");
 
             migrationBuilder.DropTable(
-                name: "Process");
+                name: "SystemProcessNote");
+
+            migrationBuilder.DropTable(
+                name: "UserArea");
 
             migrationBuilder.DropTable(
                 name: "ResponseGateway");
@@ -396,10 +403,10 @@ namespace QuanLyNongNghiepAPI.Migrations
                 name: "Sensor");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "SystemProcess");
 
             migrationBuilder.DropTable(
-                name: "SystemProcess");
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "System");

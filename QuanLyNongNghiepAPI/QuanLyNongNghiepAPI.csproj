@@ -25,12 +25,6 @@
   <ItemGroup>
     <Folder Include="Controllers\Admin\" />
     <Folder Include="DataTransferObject\Converter\" />
-    <Folder Include="Services\Admin\" />
-    <Folder Include="Services\Guest\" />
-    <Folder Include="Services\SystemProcess\" />
-    <Folder Include="Services\ResponseGateway\" />
-    <Folder Include="Services\ProcessCondition\" />
-    <Folder Include="Services\Process\" />
   </ItemGroup>
 
 </Project>

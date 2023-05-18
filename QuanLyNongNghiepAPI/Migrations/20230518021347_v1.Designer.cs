@@ -12,7 +12,7 @@ using QuanLyNongNghiepAPI.Models;
 namespace QuanLyNongNghiepAPI.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230513025807_v1")]
+    [Migration("20230518021347_v1")]
     partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -157,80 +157,6 @@ namespace QuanLyNongNghiepAPI.Migrations
                     b.ToTable("Guest");
                 });
 
-            modelBuilder.Entity("QuanLyNongNghiepAPI.Models.Process", b =>
-                {
-                    b.Property<int>("ProcessID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProcessID"), 1L, 1);
-
-                    b.Property<DateTime>("CreateAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<bool>("IsDone")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NotificationType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Step")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SystemProcessID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("TimeEnd")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("TimeStart")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ProcessID");
-
-                    b.HasIndex("SystemProcessID");
-
-                    b.ToTable("Process");
-                });
-
-            modelBuilder.Entity("QuanLyNongNghiepAPI.Models.ProcessCondition", b =>
-                {
-                    b.Property<int>("ProcessConditionID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProcessConditionID"), 1L, 1);
-
-                    b.Property<int>("ProcessID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SensorID")
-                        .HasColumnType("int");
-
-                    b.Property<double>("ValueMax")
-                        .HasColumnType("float");
-
-                    b.Property<double>("ValueMin")
-                        .HasColumnType("float");
-
-                    b.HasKey("ProcessConditionID");
-
-                    b.HasIndex("ProcessID");
-
-                    b.HasIndex("SensorID");
-
-                    b.ToTable("ProcessCondition");
-                });
-
             modelBuilder.Entity("QuanLyNongNghiepAPI.Models.ResponseGateway", b =>
                 {
                     b.Property<int>("ResponseGatewayID")
@@ -365,20 +291,33 @@ namespace QuanLyNongNghiepAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SystemProcessID"), 1L, 1);
 
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDone")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NotificationType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SystemID")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdateAt")
+                    b.Property<DateTime>("TimeEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("TimeStart")
                         .HasColumnType("datetime2");
 
                     b.HasKey("SystemProcessID");
@@ -386,6 +325,89 @@ namespace QuanLyNongNghiepAPI.Migrations
                     b.HasIndex("SystemID");
 
                     b.ToTable("SystemProcess");
+                });
+
+            modelBuilder.Entity("QuanLyNongNghiepAPI.Models.SystemProcessCondition", b =>
+                {
+                    b.Property<int>("SystemProcessConditionID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SystemProcessConditionID"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SensorID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Step")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SystemProcessID")
+                        .HasColumnType("int");
+
+                    b.Property<double?>("ValueAvg")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("ValueMax")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("ValueMin")
+                        .HasColumnType("float");
+
+                    b.HasKey("SystemProcessConditionID");
+
+                    b.HasIndex("SensorID");
+
+                    b.HasIndex("SystemProcessID");
+
+                    b.ToTable("SystemProcessCondition");
+                });
+
+            modelBuilder.Entity("QuanLyNongNghiepAPI.Models.SystemProcessNote", b =>
+                {
+                    b.Property<int>("SystemProcessNoteID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SystemProcessNoteID"), 1L, 1);
+
+                    b.Property<DateTime>("CreateAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDone")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NotificationType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SystemProcessID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("TimeEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("TimeStart")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("SystemProcessNoteID");
+
+                    b.HasIndex("SystemProcessID");
+
+                    b.ToTable("SystemProcessNote");
                 });
 
             modelBuilder.Entity("QuanLyNongNghiepAPI.Models.User", b =>
@@ -462,36 +484,6 @@ namespace QuanLyNongNghiepAPI.Migrations
                     b.Navigation("System");
                 });
 
-            modelBuilder.Entity("QuanLyNongNghiepAPI.Models.Process", b =>
-                {
-                    b.HasOne("QuanLyNongNghiepAPI.Models.SystemProcess", "SystemProcess")
-                        .WithMany()
-                        .HasForeignKey("SystemProcessID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SystemProcess");
-                });
-
-            modelBuilder.Entity("QuanLyNongNghiepAPI.Models.ProcessCondition", b =>
-                {
-                    b.HasOne("QuanLyNongNghiepAPI.Models.Process", "Process")
-                        .WithMany()
-                        .HasForeignKey("ProcessID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("QuanLyNongNghiepAPI.Models.Sensor", "Sensor")
-                        .WithMany()
-                        .HasForeignKey("SensorID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Process");
-
-                    b.Navigation("Sensor");
-                });
-
             modelBuilder.Entity("QuanLyNongNghiepAPI.Models.ResponseGateway", b =>
                 {
                     b.HasOne("QuanLyNongNghiepAPI.Models.System", "System")
@@ -553,6 +545,36 @@ namespace QuanLyNongNghiepAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("System");
+                });
+
+            modelBuilder.Entity("QuanLyNongNghiepAPI.Models.SystemProcessCondition", b =>
+                {
+                    b.HasOne("QuanLyNongNghiepAPI.Models.Sensor", "Sensor")
+                        .WithMany()
+                        .HasForeignKey("SensorID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("QuanLyNongNghiepAPI.Models.SystemProcess", "SystemProcess")
+                        .WithMany()
+                        .HasForeignKey("SystemProcessID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Sensor");
+
+                    b.Navigation("SystemProcess");
+                });
+
+            modelBuilder.Entity("QuanLyNongNghiepAPI.Models.SystemProcessNote", b =>
+                {
+                    b.HasOne("QuanLyNongNghiepAPI.Models.SystemProcess", "SystemProcess")
+                        .WithMany()
+                        .HasForeignKey("SystemProcessID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SystemProcess");
                 });
 
             modelBuilder.Entity("QuanLyNongNghiepAPI.Models.UserArea", b =>

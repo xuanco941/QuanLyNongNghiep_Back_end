@@ -18,7 +18,7 @@ namespace QuanLyNongNghiepAPI.Models
         public string Password { get; set; } = string.Empty;
         [Required]
         [StringLength(100)]
-        public string Email { get; set; } = string.Empty;
+        public string? Email { get; set; } = string.Empty;
         [StringLength(20)]
         public string? PhoneNumber { get; set; } = string.Empty;
         [StringLength(300)]

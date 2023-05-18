@@ -1,6 +1,6 @@
 ﻿namespace QuanLyNongNghiepAPI.Services.ProcessCondition
 {
-    public interface IProcessConditionService
+    public class SystemProcessConditionService
     {
     }
 }

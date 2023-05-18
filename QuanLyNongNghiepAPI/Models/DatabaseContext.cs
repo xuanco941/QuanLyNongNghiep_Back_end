@@ -9,8 +9,8 @@ namespace QuanLyNongNghiepAPI.Models
         public DbSet<Admin> Admins { get; set; } = null!;
         public DbSet<Area> Areas { get; set; } = null!;
         public DbSet<Guest> Guests { get; set; } = null!;
-        public DbSet<Process> Processes { get; set; } = null!;
-        public DbSet<ProcessCondition> ProcessConditions { get; set; } = null!;
+        public DbSet<SystemProcessNote> SystemProcessNotes { get; set; } = null!;
+        public DbSet<SystemProcessCondition> SystemProcessConditions { get; set; } = null!;
         public DbSet<ResponseGateway> ResponseGateways { get; set; } = null!;
         public DbSet<Sensor> Sensors { get; set; } = null!;
         public DbSet<SensorData> SensorDatas { get; set; } = null!;
@@ -50,13 +50,13 @@ namespace QuanLyNongNghiepAPI.Models
             {
                 entity.HasIndex(e => e.Username).IsUnique();
             });
-            //Process
-            modelBuilder.Entity<Process>(entity =>
+            //SystemProcessNote
+            modelBuilder.Entity<SystemProcessNote>(entity =>
             {
                 entity.Property(e => e.CreateAt).HasDefaultValueSql("(getdate())");
             });
             //ProcessCondition
-            modelBuilder.Entity<ProcessCondition>()
+            modelBuilder.Entity<SystemProcessCondition>()
             .HasOne(sd => sd.Sensor)
             .WithMany()
             .HasForeignKey(sd => sd.SensorID)

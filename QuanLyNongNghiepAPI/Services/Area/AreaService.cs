@@ -55,7 +55,7 @@ namespace QuanLyNongNghiepAPI.Services.Area
 
         }
 
-        public async Task<bool> DeleteArea(GetOrDeleteAreaModel getOrDeleteAreaModel)
+        public async Task<bool> Delete(GetOrDeleteAreaModel getOrDeleteAreaModel)
         {
             var area = await _dbContext.Areas.FindAsync(getOrDeleteAreaModel.AreaID);
             if (area != null)
@@ -83,7 +83,19 @@ namespace QuanLyNongNghiepAPI.Services.Area
             }
         }
 
+        public async Task<Models.Area?> Get(int Id)
+        {
+            try
+            {
+                var area = await _dbContext.Areas.FindAsync(Id);
 
+                return area;
+            }
+            catch
+            {
+                throw;
+            }
+        }
 
     }
 }

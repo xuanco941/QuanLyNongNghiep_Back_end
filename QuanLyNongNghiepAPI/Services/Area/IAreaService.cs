@@ -7,7 +7,10 @@ namespace QuanLyNongNghiepAPI.Services.Area
     {
         public Task<bool> Add(AddAreaModel addAreaModel);
         public Task<bool> Update(UpdateAreaModel updateAreaModel);
-        public Task<bool> DeleteArea(GetOrDeleteAreaModel getOrDeleteAreaModel);
+        public Task<bool> Delete(GetOrDeleteAreaModel getOrDeleteAreaModel);
+        public Task<Models.Area?> Get(int Id);
+        public Task<List<Models.Area>?> GetAreaByUserID(int userId);
+
 
 
     }
